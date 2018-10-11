@@ -1,0 +1,22 @@
+
+#color_list, #play_list {
+    display: inline-block;
+    
+}
+
+#color_list {
+    text-align: right;
+}
+
+#submit {
+    display: block;
+    text-align: center;
+}
+
+ul {
+    list-style: none;
+}
+
+li {
+   border-style: solid; 
+}
