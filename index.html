@@ -3,8 +3,6 @@
 
 <head>
     <title>ShakespeareMap</title>
-    <meta name="description" content="website description" />
-    <meta name="keywords" content="website keywords, website keywords" />
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" type="text/css" href="style/style.css" title="style" />
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.js'></script>
@@ -17,7 +15,7 @@
         <div id="site_content">
             <nav id='menu'></nav>
             <div id='map'></div>
-    <script>
+    <script type="text/javascript">
         var plays = ['Titus Andronicus', 'Coriolanus', 'Troilus and Cressida', 'Pericles', 'Timon of Athens', 'Antony and Cleopatra', 'Julius Caesar']
         //public token, change this to put it in production
         mapboxgl.accessToken = 'pk.eyJ1IjoiY2d3ZWJiMTgiLCJhIjoiY2psd3FhMTMwMDFjNjN2b3Zmd3JyMWV2ZSJ9.r8XM2Wrgj6kueUh3Jdo3iw';
@@ -132,8 +130,6 @@
                 };
             });
 
-            
-            //tri
             //code to create a menu with checkboxes for each play
             var LayerIds = ['Titus_labels', 'Coriolanus_labels', 'Troilus_labels', 'Pericles_labels', 'Timon_labels', 'Antony_labels', 'Julius_labels'];
             var visibleLayerIds = ['Titus_labels', 'Coriolanus_labels', 'Troilus_labels', 'Pericles_labels', 'Timon_labels', 'Antony_labels', 'Julius_labels'];

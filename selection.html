@@ -15,15 +15,14 @@
     <ul id='play_list'>Plays:
     </ul>
     <ul id="color_list"> Colors:
-        <!--TODO: Create hex attr to store the hex color code-->
-        <li id='color_1' class='color'>Play 1</li>
-        <li id='color_2' class='color'>Play 2</li>
-        <li id='color_3' class='color'>Play 3</li>
-        <li id='color_4' class='color'>Play 4</li>
-        <li id='color_5' class='color'>Play 5</li>
-        <li id='color_6' class='color'>Play 6</li>
-        <li id='color_7' class='color'>Play 7</li>
-        <li id='color_8' class='color'>Play 8</li>
+        <li id='color_1' class='color' hex='#800000'>Play 1</li>
+        <li id='color_2' class='color' hex='#1e87ea'>Play 2</li>
+        <li id='color_3' class='color' hex='#f44e30'>Play 3</li>
+        <li id='color_4' class='color' hex='#911eb4'>Play 4</li>
+        <li id='color_5' class='color' hex='#e6194B'>Play 5</li>
+        <li id='color_6' class='color' hex='#ffff21'>Play 6</li>
+        <li id='color_7' class='color' hex='#49a517'>Play 7</li>
+        <li id='color_8' class='color' hex='#000075'>Play 8</li>
     </ul>
     <button id='submit'>Go</button>
     <script type='text/javascript'>
@@ -45,11 +44,9 @@
             });
             //click functions of .play and .color should be related so that the color list shows the associated plays dynamically
             $('.play').click(function(e) {
-                console.log('Current Color: ' + current_color + ', Current Play: ' + current_play);
                 //neither current_play nor current_color
                 if (current_color == '' && current_play == '') {
                     current_play = e.target.textContent;
-                    console.log(current_play);
                 }
                 //current_color but no current_play
                 else if (current_color != '' && current_play == '') {
@@ -58,26 +55,22 @@
                     //check if the play has already been assigned to be a color
                     if (current_play in color_dict) {
                         c_id = color_dict[current_play];
-                        document.getElementById(c_id).textContent = "Play " + c_id.substr(5);
+                        document.getElementById(c_id).textContent = "Play " + c_id.substr(6);
                     }
                     t.textContent = current_play;
                     color_dict[current_play] = current_color;
-                    console.log(color_dict);
                 }
                 //current_play but no current_color
                 else if (current_color == '' && current_play != '') {
                     current_play = e.target.textContent;
-                    console.log(current_play);
                 }
                 //both current play and current color
                 else {
                     current_color = '';
                     current_play = e.target.textContent;
-                    console.log(current_color, current_play);
                 };
             });
             $('.color').click(function(e) {
-               console.log('Current Color: ' + current_color + ', Current Play: ' + current_play);
                 if (e.target.textContent.substr(0, 4) != 'Play') {
                         e.target.textContent = 'Play ' + e.target.id.substr(6);
                 };
@@ -93,7 +86,7 @@
                 else if (current_color == '' && current_play != '') {
                     if (current_play in color_dict){
                         c_id = color_dict[current_play];
-                        document.getElementById(c_id).textContent = "Play " + c_id.substr(5);
+                        document.getElementById(c_id).textContent = "Play " + c_id.substr(6);
                     }
                     e.target.textContent = current_play;
                     current_color = e.target.id;
@@ -103,8 +96,14 @@
                 else {
                     current_play = '';
                     current_color = e.target.id;
-                    console.log('Current Color: ' + current_color + ', Current Play: ' + current_play);
                 };
+            });
+            $('#submit').click(function(){
+                for (var key in color_dict) {
+                    console.log(document.getElementById(color_dict[key]))
+                    color_dict[key] = document.getElementById(color_dict[key]).getAttribute('hex');
+                }
+                console.log(color_dict);
             });
         });
         
@@ -112,5 +111,4 @@
         
     </script>
 </body>
-<!--play_colors = [('Coriolanus', '#800000'), ('Julius Caesar', '#1e87ea'), ('Antony and Cleopatra', '#f44e30'), ('Pericles', '#9A6324'), ('Troilus and Cressida', '#911eb4'), ('Titus Andronicus', '#e6194B'), ('Timon of Athens', '#ffff21')]-->
 </html>
