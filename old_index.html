@@ -1,0 +1,209 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>ShakespeareMap</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" href="style/style.css" title="style" />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.css' rel='stylesheet' />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+</head>
+
+<body>
+        <div id="site_content">
+            <nav id='menu'></nav>
+            <div id='map'></div>
+    <script type="text/javascript">
+        var plays = ['Titus Andronicus', 'Coriolanus', 'Troilus and Cressida', 'Pericles', 'Timon of Athens', 'Antony and Cleopatra', 'Julius Caesar']
+        //public token, change this to put it in production
+        mapboxgl.accessToken = 'pk.eyJ1IjoiY2d3ZWJiMTgiLCJhIjoiY2psd3FhMTMwMDFjNjN2b3Zmd3JyMWV2ZSJ9.r8XM2Wrgj6kueUh3Jdo3iw';
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/cgwebb18/cjm96xrni6jkp2snw5ggcrytj',
+            center: [18.465510, 41.768844],
+            zoom: 3.8
+        });
+        map.on('load', function() {
+        // places.geojson is the source of the polygons 
+        // labels.geojson is the source of the point for each polygon
+            map.addSource('places', {
+                "type": "geojson",
+                "data": "./data/places.geojson"
+            });
+            map.addSource('labels', {
+                "type": "geojson",
+                "data": "./data/labels.geojson"
+            });
+            //this layer stays hidden, holds aggregate data
+            map.addLayer({
+                "id": "labels",
+                "type": "circle",
+                "source": "labels",
+                "paint": {
+                    "circle-opacity": 0
+                }
+            }); 
+            //loop to add sources and layers for all plays
+            plays.forEach(function(item, index, array){
+                fpath = './data/Labels/' + item + '_labels.geojson';
+                layer_name = item.split(' ')[0] + '_labels';
+                map.addSource(layer_name, {
+                    type: 'geojson',
+                    data: fpath
+                });
+                map.addLayer({
+                    'id': layer_name,
+                    'type': 'circle',
+                    'source': layer_name,
+                    'paint': {
+                        'circle-color': [
+                            'get', 'color'
+                        ]
+                    }
+                });
+                
+            });
+            
+            // When a click event occurs on a feature in the labels layer generate a list of mentions
+            map.on('click', 'labels', function (e) {
+                var coordinates = e.features[0].geometry.coordinates.slice();
+                var place = e.features[0].properties["place name"];
+                var l = e.features.length;
+                var descriptions = '<h3>' + place + '</h3><ul><li>Play, Character, Act.Scene.Line:</li>';
+                for (i = 0; i < l; i++){
+                    var play = e.features[i].properties.play;
+                    var id = play.split(' ')[0] + '_labels';
+                    //this insures that only visible layers can be clicked
+                    if (visibleLayerIds.includes(play.split(' ')[0] + '_labels')) {
+                        var character = e.features[i].properties.character;
+                        var asl_num = e.features[i].properties["act.scene."];
+                        var n_d = '<li>' + play + ', ' + 
+                            //adding function to highlight one character's lines at a time 'ca' = custom attribute
+                            '<a ca2=\"' + character + '\"' + 'class=\"char_select\"' + '>' + character + '</a>' 
+                            + ', ' + asl_num + '</li>';
+                        console.log(n_d);
+                        var descriptions = descriptions + n_d;
+                    }
+                };
+                descriptions = descriptions + '</ul>'
+
+                // Ensure that if the map is zoomed out such that multiple
+                // copies of the feature are visible, the popup appears
+                // over the copy being pointed to.
+                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                }
+
+                new mapboxgl.Popup()
+                    .setLngLat(coordinates)
+                    .setHTML(descriptions)
+                    .addTo(map);
+            });
+            
+            //char_select function
+            $(document).on('click', '.char_select', function () {
+                if ($('#reset').length == true){
+                    console.log('Right now you can only select one character at a time.')
+                }
+                else {
+                    var character = $(this).attr('ca2');
+                        
+                    for (var i = 0; i < visibleLayerIds.length; i++) {
+                        var layer = visibleLayerIds[i];
+                        map.setFilter(layer, ['==', ['get', 'character'], character]);
+                    };
+
+                    //adds reset button to menu
+                    reset = $('<a id=\'reset\'></a>').text('Deselect ' + character).click(function() {
+                        console.log('anything');
+                        for (var i = 0; i < visibleLayerIds.length; i++) {
+                            var layer = visibleLayerIds[i];
+                            map.setFilter(layer);
+                        };
+                        $("#reset").remove();
+                    });
+
+
+                    $("#menu").append(reset);
+                };
+            });
+
+            //code to create a menu with checkboxes for each play
+            var LayerIds = ['Titus_labels', 'Coriolanus_labels', 'Troilus_labels', 'Pericles_labels', 'Timon_labels', 'Antony_labels', 'Julius_labels'];
+            var visibleLayerIds = ['Titus_labels', 'Coriolanus_labels', 'Troilus_labels', 'Pericles_labels', 'Timon_labels', 'Antony_labels', 'Julius_labels'];
+            
+            //this function creates the menu, so the LayerIds can change and it shouldn't affect this
+            function createMenu(LIds, ps){
+//                var form = document.createElement('form');
+                for (var i = 0; i < LIds.length; i++) {
+                    var id = LIds[i];
+                    
+                    var link = document.createElement('a');
+                    link.setAttribute('id', id);
+                    link.className = 'active';
+                    link.textContent = ps[i];
+            
+                    
+                    link.onclick = function(e) {
+                        var clickedLayer = this.getAttribute('id');
+                        let el = document.getElementById(clickedLayer);
+                        if (el.className == '') {
+                            el.className = 'active'
+                        }
+                        else{
+                            el.className = ''
+                        };
+                        visibleLayerToggle(clickedLayer);
+                    };
+                    var menu = document.getElementById('menu');
+                    menu.appendChild(link);
+                }
+            };
+            
+            //function to handle all Layer Toggling
+            //char is an optional argument to specify the character, might add similar argument for act
+            function visibleLayerToggle(id, char='all') {
+                if (visibleLayerIds.includes(id)==true) {
+                    map.setLayoutProperty(id, 'visibility', 'none');
+                    removeA(visibleLayerIds, id);
+                }
+                else {
+                    visibleLayerIds = visibleLayerIds.concat(id);
+                    map.setLayoutProperty(id, 'visibility', 'visible');
+                };
+            };
+            
+            createMenu(LayerIds, plays);
+            
+            //helper function to remove specific 
+            function removeA(arr) {
+                var what, a = arguments, L = a.length, ax;
+                while (L > 1 && arr.length) {
+                    what = a[--L];
+                    while ((ax= arr.indexOf(what)) !== -1) {
+                        arr.splice(ax, 1);
+                    }
+                }
+                return arr;
+            };
+            
+            //TODO make it so that this only works on active layers
+            //changes the mouse when it encounters a label
+            map.on('mouseenter', 'labels', function () {
+                map.getCanvas().style.cursor = 'pointer';
+            });
+
+            // Change it back to a pointer when it leaves.
+            map.on('mouseleave', 'labels', function () {
+                map.getCanvas().style.cursor = '';
+            });
+    });
+            
+    </script>
+
+        </div>
+</body>
+
+</html>
