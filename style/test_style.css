@@ -226,12 +226,12 @@ h5, h6
     margin-left: 250px;
 }
 
-ul {
+ul.color_list {
     list-style: none;
     margin-left: 125px;
 }
 
-li {
+li.play, li.color {
     border-style: solid;
     border-width: thin;
     font-size: 16px;
