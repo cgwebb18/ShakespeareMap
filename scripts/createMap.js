@@ -39,6 +39,15 @@ function createMap(color_dict, map) {
             'source': layer_name
         });
         map.setPaintProperty(layer_name, 'circle-color', color);
+        //changes the mouse when it encounters a label
+        map.on('mouseenter', layer_name, function () {
+            map.getCanvas().style.cursor = 'pointer';
+        });
+
+        // Change it back to a pointer when it leaves.
+        map.on('mouseleave', layer_name, function () {
+            map.getCanvas().style.cursor = '';
+        });
     });
     // When a click event occurs on a feature in the labels layer generate a list of mentions
     map.on('click', 'labels', function (e) {
@@ -75,15 +84,6 @@ function createMap(color_dict, map) {
             .addTo(map);
     });
     //TODO make it so that this only works on active layers
-    //changes the mouse when it encounters a label
-    map.on('mouseenter', 'labels', function () {
-        map.getCanvas().style.cursor = 'pointer';
-    });
-
-    // Change it back to a pointer when it leaves.
-    map.on('mouseleave', 'labels', function () {
-        map.getCanvas().style.cursor = '';
-    });
 
     //helper function to remove specific 
     function removeA(arr) {
