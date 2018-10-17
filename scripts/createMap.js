@@ -1,7 +1,7 @@
 var plays = [];
 var colors = [];
 var visibleLayerIds = [];
-function createMap(color_dict) {
+function createMap(color_dict, map) {
     console.log(color_dict);
     for (var key in color_dict) {
         plays = plays.concat(key);
@@ -11,46 +11,34 @@ function createMap(color_dict) {
         visibleLayerIds = visibleLayerIds.concat(plays[i].split(' ')[0] + '_labels');
     };
     var LayerIds = visibleLayerIds;
-    //initialize map
-    //public token, change this to put it in production
-    mapboxgl.accessToken = 'pk.eyJ1IjoiY2d3ZWJiMTgiLCJhIjoiY2psd3FhMTMwMDFjNjN2b3Zmd3JyMWV2ZSJ9.r8XM2Wrgj6kueUh3Jdo3iw';
-    var map = new mapboxgl.Map({
-        container: 'map',
-        style: 'mapbox://styles/cgwebb18/cjm96xrni6jkp2snw5ggcrytj',
-        //TODO: change center + zoom based on points represented in map
-        center: [18.465510, 41.768844],
-        zoom: 3.8
+    map.addSource('labels', {
+        "type": "geojson",
+        "data": "./data/labels.geojson"
     });
-    map.on('load', function() {
-        map.addSource('labels', {
-            "type": "geojson",
-            "data": "./data/labels.geojson"
+    //this layer stays hidden, holds aggregate data
+    map.addLayer({
+        "id": "labels",
+        "type": "circle",
+        "source": "labels",
+        "paint": {
+            "circle-opacity": 0
+        }
+    }); 
+    //loop to add sources and layers for all plays
+    plays.forEach(function(item, index, array){
+        fpath = './data/Labels/' + item + '_labels.geojson';
+        layer_name = item.split(' ')[0] + '_labels';
+        color = colors[index];
+        map.addSource(layer_name, {
+            type: 'geojson',
+            data: fpath
         });
-        //this layer stays hidden, holds aggregate data
         map.addLayer({
-            "id": "labels",
-            "type": "circle",
-            "source": "labels",
-            "paint": {
-                "circle-opacity": 0
-            }
-        }); 
-        //loop to add sources and layers for all plays
-        plays.forEach(function(item, index, array){
-            fpath = './data/Labels/' + item + '_labels.geojson';
-            layer_name = item.split(' ')[0] + '_labels';
-            color = colors[index];
-            map.addSource(layer_name, {
-                type: 'geojson',
-                data: fpath
-            });
-            map.addLayer({
-                'id': layer_name,
-                'type': 'circle',
-                'source': layer_name
-            });
-            map.setPaintProperty(layer_name, 'circle-color', color);
+            'id': layer_name,
+            'type': 'circle',
+            'source': layer_name
         });
+        map.setPaintProperty(layer_name, 'circle-color', color);
     });
     // When a click event occurs on a feature in the labels layer generate a list of mentions
     map.on('click', 'labels', function (e) {
