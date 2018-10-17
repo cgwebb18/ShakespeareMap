@@ -43,9 +43,21 @@ function createMap(color_dict, map) {
         map.on('mouseenter', layer_name, function () {
             map.getCanvas().style.cursor = 'pointer';
         });
+        
+        //preview name of place on mouseover
+        var popup = {};
+        map.on('mouseover', layer_name, function(e){
+            var coordinates = e.features[0].geometry.coordinates.slice();
+            var place_n = e.features[0].properties["place name"];
+            popup = new mapboxgl.Popup()
+                .setLngLat(coordinates)
+                .setHTML(place_n)
+                .addTo(map);
+        });
 
         // Change it back to a pointer when it leaves.
         map.on('mouseleave', layer_name, function () {
+            popup.remove();
             map.getCanvas().style.cursor = '';
         });
     });
