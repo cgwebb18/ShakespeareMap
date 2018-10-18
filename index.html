@@ -15,7 +15,8 @@
 <body>
     <div id='selection_popup' class='modal'>
     <div class='modal-content'><h1>Map Shakespeare's Historical Plays</h1>
-    <h3>Assign a color to each play you would like to see mapped (up to 8):</h3>
+    <h3>Assign colors to plays (up to 8):</h3>
+    <div id="lists+button">
     <ul id='play_list'>Plays:
     </ul>
     <ul id="color_list"> Colors:
@@ -29,6 +30,7 @@
         <li id='color_8' class='color' hex='#000075'>Play 8</li>
     </ul>
     <button id='submit'>Go</button>
+    </div>
     <script type='text/javascript'>
         var all_plays = ['Titus Andronicus', 'Coriolanus', 'Troilus and Cressida', 'Pericles', 'Timon of Athens', 'Antony and Cleopatra', 'Julius Caesar']
         var color_dict = {};

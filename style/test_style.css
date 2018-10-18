@@ -16,7 +16,6 @@ body
 }
 .mapboxgl-popup-content {
  overflow-y: scroll;
- 
 }
 p
 { padding: 0 0 20px 0;
@@ -25,11 +24,13 @@ p
 img
 { border: 0;}
 
-h1, h2, h3, h4, h5, h6 
-{ font: normal 175% 'trebuchet ms', arial, sans-serif;
+h1, h2, h3, h4, h5, h6 { 
+  font: italic 175% 'Apple Chancery', arial, sans-serif;
   color: #000;
   margin: 0 0 15px 0;
-  padding: 15px 0 5px 0;}
+  padding: 15px 0 5px 0;
+  text-align: center;
+}
 
 h2
 { font: normal 175% 'century gothic', arial, sans-serif;}
@@ -186,11 +187,12 @@ h5, h6
 
 /* Modal Content/Box */
 .modal-content {
-    background-color: #fefefe;
-    margin: 15% auto; /* 15% from the top and centered */
+    background-color: #ce8665;
+    margin: 5% auto; /* 15% from the top and centered */
     padding: 20px;
     border: 1px solid #888;
-    width: 80%; /* Could be more or less, depending on screen size */
+    width: 50%;
+    border-radius: 15px;
 }
 
 /* The Close Button */
@@ -223,12 +225,20 @@ h5, h6
     text-align: center;
     height: 25px;
     width: 50px;
-    margin-left: 250px;
+    margin-left: 50%;
 }
 
-ul.color_list {
+#color_list, #play_list {
     list-style: none;
-    margin-left: 125px;
+    margin-left: 20%;
+}
+
+#play_list {
+    overflow-y: scroll;
+}
+
+li.play{
+    background-color: #fff;
 }
 
 li.play, li.color {
@@ -240,3 +250,11 @@ li.play, li.color {
     padding: 5px;
     border-radius: 3px;
 }
+
+ul {
+    font-size: 20px;
+}
+
+
+
+
