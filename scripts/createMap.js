@@ -49,9 +49,9 @@ function createMap(color_dict, map) {
         map.on('mouseover', layer_name, function(e){
             var coordinates = e.features[0].geometry.coordinates.slice();
             var place_n = e.features[0].properties["place name"];
-            popup = new mapboxgl.Popup()
+            popup = new mapboxgl.Popup({closeButton: false})
                 .setLngLat(coordinates)
-                .setHTML(place_n)
+                .setHTML('<h4>' + place_n + '</h4>')
                 .addTo(map);
         });
 
