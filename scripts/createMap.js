@@ -13,7 +13,7 @@ function createMap(color_dict, map) {
     var LayerIds = visibleLayerIds;
     map.addSource('labels', {
         "type": "geojson",
-        "data": "./data/labels.geojson"
+        "data": "./data/labels2.geojson"
     });
     //this layer stays hidden, holds aggregate data
     map.addLayer({

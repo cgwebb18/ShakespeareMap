@@ -229,11 +229,13 @@ h5, h6
 }
 
 #color_list, #play_list {
+    display: inline-block;
     list-style: none;
     margin-left: 20%;
 }
 
 #play_list {
+    height: 300px;
     overflow-y: scroll;
 }
 
@@ -259,3 +261,6 @@ ul {
     overflow-y: hidden;
 }
 
+#lists+button {
+    display: inline-block;
+}
