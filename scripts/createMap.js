@@ -29,6 +29,7 @@ function createMap(color_dict, map) {
     plays.forEach(function(item, index, array){
         fpath = './data/Labels/' + item + '_labels.geojson';
         layer_name = item + '_labels';
+        console.log(layer_name);
         color = colors[index];
         map.addSource(layer_name, {
             type: 'geojson',
