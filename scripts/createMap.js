@@ -7,6 +7,7 @@ function createMap(color_dict, map) {
         plays = plays.concat(key);
         colors = colors.concat(color_dict[key]);
     };
+    console.log(plays);
     for (var i = 0; i < plays.length; i++) {
         visibleLayerIds = visibleLayerIds.concat(plays[i].split(' ')[0] + '_labels');
     };
@@ -27,7 +28,7 @@ function createMap(color_dict, map) {
     //loop to add sources and layers for all plays
     plays.forEach(function(item, index, array){
         fpath = './data/Labels/' + item + '_labels.geojson';
-        layer_name = item.split(' ')[0] + '_labels';
+        layer_name = item + '_labels';
         color = colors[index];
         map.addSource(layer_name, {
             type: 'geojson',
