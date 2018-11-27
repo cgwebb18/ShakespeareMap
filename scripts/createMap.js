@@ -7,14 +7,13 @@ function createMap(color_dict, map) {
         plays = plays.concat(key);
         colors = colors.concat(color_dict[key]);
     };
-    console.log(plays);
     for (var i = 0; i < plays.length; i++) {
-        visibleLayerIds = visibleLayerIds.concat(plays[i].split(' ')[0] + '_labels');
+        visibleLayerIds = visibleLayerIds.concat(plays[i] + '_labels');
     };
     var LayerIds = visibleLayerIds;
     map.addSource('labels', {
         "type": "geojson",
-        "data": "./data/labels2.geojson"
+        "data": "./data/labels3.geojson"
     });
     //this layer stays hidden, holds aggregate data
     map.addLayer({
@@ -65,17 +64,20 @@ function createMap(color_dict, map) {
     });
     // When a click event occurs on a feature in the labels layer generate a list of mentions
     map.on('click', 'labels', function (e) {
+        console.log('clicked!');
         var coordinates = e.features[0].geometry.coordinates.slice();
         var place = e.features[0].properties["place name"];
+        console.log(place);
         var l = e.features.length;
         var descriptions = '<h3>' + place + '</h3><ul><li>Play, Character, Act.Scene.Line:</li>';
         for (i = 0; i < l; i++){
             var play = e.features[i].properties.play;
-            var id = play.split(' ')[0] + '_labels';
+            var id = play + '_labels';
             //this insures that only visible layers can be clicked
             if (visibleLayerIds.includes(id)) {
                 var character = e.features[i].properties.character;
-                var asl_num = e.features[i].properties["act.scene."];
+                var asl_num = e.features[i].properties["a.s.l."];
+                console.log(asl_num);
                 var n_d = '<li>' + play + ', ' + 
                     //adding function to highlight one character's lines at a time 'ca' = custom attribute
                     '<a ca2=\"' + character + '\"' + 'class=\"char_select\"' + '>' + character + '</a>' 
