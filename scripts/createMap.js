@@ -1,6 +1,7 @@
 var plays = [];
 var colors = [];
 var visibleLayerIds = [];
+var c_place = '';
 function createMap(color_dict, map) {
     console.log(color_dict);
     for (var key in color_dict) {
@@ -50,6 +51,7 @@ function createMap(color_dict, map) {
         map.on('mouseover', layer_name, function(e){
             var coordinates = e.features[0].geometry.coordinates.slice();
             var place_n = e.features[0].properties["place name"];
+            c_place = place_n;
             popup = new mapboxgl.Popup({closeButton: false})
                 .setLngLat(coordinates)
                 .setHTML('<h4>' + place_n + '</h4>')
@@ -66,7 +68,7 @@ function createMap(color_dict, map) {
     map.on('click', 'labels', function (e) {
         console.log('clicked!');
         var coordinates = e.features[0].geometry.coordinates.slice();
-        var place = e.features[0].properties["place name"];
+        var place = c_place;
         console.log(place);
         var l = e.features.length;
         var descriptions = '<h3>' + place + '</h3><ul><li>Play, Character, Act.Scene.Line:</li>';
