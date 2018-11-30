@@ -3,7 +3,6 @@ var colors = [];
 var visibleLayerIds = [];
 var c_place = '';
 function createMap(color_dict, map) {
-    console.log(color_dict);
     for (var key in color_dict) {
         plays = plays.concat(key);
         colors = colors.concat(color_dict[key]);
@@ -69,7 +68,6 @@ function createMap(color_dict, map) {
         console.log('clicked!');
         var coordinates = e.features[0].geometry.coordinates.slice();
         var place = c_place;
-        console.log(place);
         var l = e.features.length;
         var descriptions = '<h3>' + place + '</h3><ul><li>Play, Character, Act.Scene.Line:</li>';
         for (i = 0; i < l; i++){
@@ -79,7 +77,6 @@ function createMap(color_dict, map) {
             if (visibleLayerIds.includes(id)) {
                 var character = e.features[i].properties.character;
                 var asl_num = e.features[i].properties["a.s.l."];
-                console.log(asl_num);
                 var n_d = '<li>' + play + ', ' + 
                     //adding function to highlight one character's lines at a time 'ca' = custom attribute
                     '<a ca2=\"' + character + '\"' + 'class=\"char_select\"' + '>' + character + '</a>' 
@@ -125,6 +122,9 @@ function createMap(color_dict, map) {
             visibleLayerIds = visibleLayerIds.concat(id);
             map.setLayoutProperty(id, 'visibility', 'visible');
         };
+        var visiblePlays = visibleLayerIds.map(function(item) {
+            return item.replace('_labels', '')
+        });
     };
     //TODO: fix up this function so that it creates a color coded menu (will require a lot of CSS work)
     //this function creates the menu, so the LayerIds can change and it shouldn't affect this
@@ -179,7 +179,6 @@ function createMap(color_dict, map) {
 
                 //adds reset button to menu
                 reset = $('<a id=\'reset\'></a>').text('Deselect ' + character).click(function() {
-                    console.log('anything');
                     for (var i = 0; i < visibleLayerIds.length; i++) {
                         var layer = visibleLayerIds[i];
                         map.setFilter(layer);
