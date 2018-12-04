@@ -121,9 +121,11 @@ function createMap(color_dict, map) {
         if (r_chars.length != 0) {
             var base = 'These mentions might refer to '
             for (v = 0; v < r_chars.length; v++){
-                base = base + r_chars[v][0] + " from " + r_chars[v][1]
                 if (v > 0) {
                     base = base + " or " + r_chars[v][0] + " from " + r_chars[v][1]
+                }
+                else {
+                    base = base + r_chars[v][0] + " from " + r_chars[v][1]
                 }
             }
             descriptions = '<div id=chars>' + base + '</div>' + descriptions 
