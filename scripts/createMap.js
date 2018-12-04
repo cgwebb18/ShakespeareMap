@@ -2,7 +2,22 @@ var plays = [];
 var colors = [];
 var visibleLayerIds = [];
 var c_place = '';
+var visiblePlays = [];
+var c_chars = [];
+
 function createMap(color_dict, map) {
+    function filterbyplay(c_arr, p_arr) {
+        var acc = [];
+        for(i = 0; i < c_arr.length; i++){
+            var item = c_arr[i];
+            var c = item[0];
+            var p = item[1];
+            if (p_arr.includes(p)) {
+                acc.push(item);
+            };
+        }
+        return acc;
+    };
     for (var key in color_dict) {
         plays = plays.concat(key);
         colors = colors.concat(color_dict[key]);
@@ -68,13 +83,17 @@ function createMap(color_dict, map) {
         console.log('clicked!');
         var coordinates = e.features[0].geometry.coordinates.slice();
         var place = c_place;
+        var play_acc = []
         var l = e.features.length;
         var descriptions = '<h3>' + place + '</h3><ul><li>Play, Character, Act.Scene.Line:</li>';
         for (i = 0; i < l; i++){
             var play = e.features[i].properties.play;
             var id = play + '_labels';
-            //this insures that only visible layers can be clicked
+            //this ensures that only visible layers can be clicked
             if (visibleLayerIds.includes(id)) {
+                if (play_acc.includes(play) == false) {
+                    play_acc.push(play);
+                }
                 var character = e.features[i].properties.character;
                 var asl_num = e.features[i].properties["a.s.l."];
                 var n_d = '<li>' + play + ', ' + 
@@ -85,7 +104,30 @@ function createMap(color_dict, map) {
             }
         };
         descriptions = descriptions + '</ul>'
-
+        //i_chars 'initial characters' these should be from only the plays that mention this place
+        i_chars = filterbyplay(c_chars, play_acc);
+        //r_chars 'relevant characters' these are the characters whose names include the place name
+        r_chars = []
+        for (i = 0; i < i_chars.length; i++) {
+            char = i_chars[i][0];
+            charray = char.split(" ");
+            for (x = 0; x < charray.length; x++) {
+                if (charray[x] == c_place) {
+                    r_chars.push(i_chars[i]);
+                }
+            }
+            
+        }
+        if (r_chars.length != 0) {
+            var base = 'These mentions might refer to '
+            for (v = 0; v < r_chars.length; v++){
+                base = base + r_chars[v][0] + " from " + r_chars[v][1]
+                if (v > 0) {
+                    base = base + " or " + r_chars[v][0] + " from " + r_chars[v][1]
+                }
+            }
+            descriptions = '<div id=chars>' + base + '</div>' + descriptions 
+        }
         // Ensure that if the map is zoomed out such that multiple
         // copies of the feature are visible, the popup appears
         // over the copy being pointed to.
@@ -98,9 +140,8 @@ function createMap(color_dict, map) {
             .setHTML(descriptions)
             .addTo(map);
     });
-    //TODO make it so that this only works on active layers
 
-    //helper function to remove specific 
+    //helper function to remove specific item from an array
     function removeA(arr) {
         var what, a = arguments, L = a.length, ax;
         while (L > 1 && arr.length) {
@@ -122,13 +163,14 @@ function createMap(color_dict, map) {
             visibleLayerIds = visibleLayerIds.concat(id);
             map.setLayoutProperty(id, 'visibility', 'visible');
         };
-        var visiblePlays = visibleLayerIds.map(function(item) {
-            return item.replace('_labels', '')
-        });
     };
     //TODO: fix up this function so that it creates a color coded menu (will require a lot of CSS work)
     //this function creates the menu, so the LayerIds can change and it shouldn't affect this
     function createMenu(LIds, ps, cs){
+        visiblePlays = visibleLayerIds.map(function(item) {
+            return item.replace('_labels', '');
+        });
+        c_chars = filterbyplay(p_chars, visiblePlays);
         var color_ref = {
             '#800000':'color_1',
             '#1e87ea':'color_2',
@@ -194,3 +236,4 @@ function createMap(color_dict, map) {
     createMenu(LayerIds, plays, colors);
 
 };
+

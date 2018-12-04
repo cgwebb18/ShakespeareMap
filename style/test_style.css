@@ -258,7 +258,7 @@ ul {
 }
 
 .mapboxgl-popup-content {
-    overflow-y: hidden;
+    overflow-y: scroll;
 }
 
 #lists+button {
