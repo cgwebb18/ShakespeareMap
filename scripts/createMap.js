@@ -38,7 +38,7 @@ function createMap(color_dict, map) {
         "paint": {
             "circle-opacity": 0
         }
-    }); 
+    });
     //loop to add sources and layers for all plays
     plays.forEach(function(item, index, array){
         fpath = './data/Labels/' + item + '_labels.geojson';
@@ -46,13 +46,28 @@ function createMap(color_dict, map) {
         console.log(layer_name);
         color = colors[index];
         map.addSource(layer_name, {
-            type: 'geojson',
-            data: fpath
+            'type': 'geojson',
+            'data': fpath,
+            'cluster': true,
+            'clusterMaxZoom': 6,
+            'clusterRadius': 40
         });
         map.addLayer({
             'id': layer_name,
             'type': 'circle',
-            'source': layer_name
+            'source': layer_name,
+            'filter': ['has', 'point_count'],
+            'paint': {
+                'circle-radius': [
+                    'step',
+                    ['get', 'point_count'],
+                    20,
+                    5,
+                    30,
+                    10,
+                    40
+                ]
+            }
         });
         map.setPaintProperty(layer_name, 'circle-color', color);
         //changes the mouse when it encounters a label
@@ -60,22 +75,32 @@ function createMap(color_dict, map) {
             map.getCanvas().style.cursor = 'pointer';
         });
         
-        //preview name of place on mouseover
+        //preview names of places on mouseover
         var popup = {};
         map.on('mouseover', layer_name, function(e){
-            var coordinates = e.features[0].geometry.coordinates.slice();
-            var place_n = e.features[0].properties["place name"];
-            c_place = place_n;
-            popup = new mapboxgl.Popup({closeButton: false})
-                .setLngLat(coordinates)
-                .setHTML('<h4>' + place_n + '</h4>')
-                .addTo(map);
-        });
+            var features = e.features;
+            var clusterId = features[0].properties.cluster_id,
+            point_count = features[0].properties.point_count,
+            clusterSource = map.getSource(layer_name);
+            
+            console.log(point_count, clusterSource);
+            
+            clusterSource.getClusterLeaves(clusterId, point_count, 0, function(err, aFeatures){
+                console.log('getClusterLeaves', err, aFeatures);
+            });
+//            var coordinates = e.features[0].geometry.coordinates.slice();
+//            var place_n = e.features[0].properties["place name"];
+//            c_place = place_n;
+//            popup = new mapboxgl.Popup({closeButton: false})
+//                .setLngLat(coordinates)
+//                .setHTML('<h4>' + place_n + '</h4>')
+//                .addTo(map);
+//        });
 
-        // Change it back to a pointer when it leaves.
-        map.on('mouseleave', layer_name, function () {
-            popup.remove();
-            map.getCanvas().style.cursor = '';
+//        // Change it back to a pointer when it leaves.
+//        map.on('mouseleave', layer_name, function () {
+//            popup.remove();
+//            map.getCanvas().style.cursor = '';
         });
     });
     // When a click event occurs on a feature in the labels layer generate a list of mentions
