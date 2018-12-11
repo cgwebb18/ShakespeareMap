@@ -114,12 +114,6 @@ function createMap(color_dict, map) {
 //            popup.remove();
             map.getCanvas().style.cursor = '';
         });
-<<<<<<< HEAD
-});
-=======
-    });
-    console.log(map.getStyle().layers);
->>>>>>> temp-branch1
     // When a click event occurs on a feature in the labels layer generate a list of mentions
     map.on('click', 'labels', function (e) {
         console.log('clicked!');
