@@ -43,22 +43,22 @@ function createMap(color_dict, map) {
             "circle-opacity": 0
         }
     });
+    map.addSource('hm-1', {
+            "type": 'raster',
+            "url": 'mapbox://cgwebb18.3ctwy9uc',
+            "tileSize": 256
+        });
+    map.addLayer({
+            'id':  'hm-1',
+            'type': 'raster',
+            'source': 'hm-1'
+    });
     //loop to add sources and layers for all plays
     layers.forEach(function(item, index, array){
         fpath = './data/Labels/' + item + '.geojson';
         layer_name = item;
         console.log(layer_name);
         color = colors[index];
-//        map.addSource('hm-1', {
-//            "type": 'raster',
-//            "url": 'mapbox://cgwebb18.3ctwy9uc',
-//            "tileSize": 256
-//        });
-//        map.addLayer({
-//            'id':  'hm-1',
-//            'type': 'raster',
-//            'source': 'hm-1'
-//        });
         map.addSource(layer_name, {
             'type': 'geojson',
             'data': fpath
@@ -224,11 +224,11 @@ function createMap(color_dict, map) {
             menu.appendChild(link);
         }
         h_toggle = $('<a id=\'h_toggle1\'></a>').text('Toggle Historical Map').click(function() {
-            var v = map.getLayoutProperty('cgwebb18-3ctwy9uc', 'visibility');
+            var v = map.getLayoutProperty('hm-1', 'visibility');
             if (v === 'visible') {
-                map.setLayoutProperty('cgwebb18-3ctwy9uc', 'visibility', 'none');
+                map.setLayoutProperty('hm-1', 'visibility', 'none');
             } else {
-                map.setLayoutProperty('cgwebb18-3ctwy9uc', 'visibility', 'visible');
+                map.setLayoutProperty('hm-1', 'visibility', 'visible');
             }
         });
         $('#menu').append(h_toggle);
@@ -261,6 +261,7 @@ function createMap(color_dict, map) {
         });
     };
     createMenu(LayerIds, plays, colors);
+//    console.log(map.getStyle().layers);
 
 };
 
