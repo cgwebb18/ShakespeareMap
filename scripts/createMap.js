@@ -66,21 +66,7 @@ function createMap(color_dict, map) {
         map.addLayer({
             'id': layer_name,
             'type': 'circle',
-            'source': layer_name,
-            'filter': ['has', 'point_count'],
-            'paint': {
-                'circle-radius': [
-                    'step',
-                    ['get', 'point_count'],
-                    5,
-                    1,
-                    10,
-                    5,
-                    30,
-                    10,
-                    40
-                ]
-            }
+            'source': layer_name
         });
         map.setPaintProperty(layer_name, 'circle-color', color);
         //changes the mouse when it encounters a label
@@ -93,27 +79,20 @@ function createMap(color_dict, map) {
         map.on('mouseover', layer_name, function(e){
             var layer = e.features[0].layer.id
             var features = e.features;
-            var clusterId = features[0].properties.cluster_id,
-            point_count = features[0].properties.point_count,
-            clusterSource = map.getSource(layer);
-            
-            clusterSource.getClusterLeaves(clusterId, point_count, 0, function(err, Features){
-                console.log(Features);
-            });
-//            var coordinates = e.features[0].geometry.coordinates.slice();
-//            var place_n = e.features[0].properties["place name"];
-//            c_place = place_n;
-//            popup = new mapboxgl.Popup({closeButton: false})
-//                .setLngLat(coordinates)
-//                .setHTML('<h4>' + place_n + '</h4>')
-//                .addTo(map);
-//        });
-    });
+            var coordinates = e.features[0].geometry.coordinates.slice();
+            var place_n = e.features[0].properties["place name"];
+            c_place = place_n;
+            popup = new mapboxgl.Popup({closeButton: false})
+                .setLngLat(coordinates)
+                .setHTML('<h4>' + place_n + '</h4>')
+                .addTo(map);
+        });
         // Change it back to a pointer when it leaves.
         map.on('mouseleave', layer_name, function () {
-//            popup.remove();
+            popup.remove();
             map.getCanvas().style.cursor = '';
         });
+            });
     // When a click event occurs on a feature in the labels layer generate a list of mentions
     map.on('click', 'labels', function (e) {
         console.log('clicked!');
