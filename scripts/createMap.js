@@ -45,9 +45,19 @@ function createMap(color_dict, map) {
         layer_name = item + '_labels';
         console.log(layer_name);
         color = colors[index];
+//        map.addSource('hm-1', {
+//            "type": 'raster',
+//            "url": 'mapbox://cgwebb18.3ctwy9uc',
+//            "tileSize": 256
+//        });
+//        map.addLayer({
+//            'id':  'hm-1',
+//            'type': 'raster',
+//            'source': 'hm-1'
+//        });
         map.addSource(layer_name, {
-            type: 'geojson',
-            data: fpath
+            'type': 'geojson',
+            "data": fpath
         });
         map.addLayer({
             'id': layer_name,
@@ -78,6 +88,7 @@ function createMap(color_dict, map) {
             map.getCanvas().style.cursor = '';
         });
     });
+    console.log(map.getStyle().layers);
     // When a click event occurs on a feature in the labels layer generate a list of mentions
     map.on('click', 'labels', function (e) {
         console.log('clicked!');
@@ -208,7 +219,17 @@ function createMap(color_dict, map) {
             var menu = document.getElementById('menu');
             menu.appendChild(link);
         }
-         //char_select function
+        h_toggle = $('<a id=\'h_toggle1\'></a>').text('Toggle Historical Map').click(function() {
+            var v = map.getLayoutProperty('cgwebb18-3ctwy9uc', 'visibility');
+            if (v === 'visible') {
+                map.setLayoutProperty('cgwebb18-3ctwy9uc', 'visibility', 'none');
+            } else {
+                map.setLayoutProperty('cgwebb18-3ctwy9uc', 'visibility', 'visible');
+            }
+        });
+        $('#menu').append(h_toggle);
+        
+        //char_select function
         $(document).on('click', '.char_select', function () {
             if ($('#reset').length == true){
                 console.log('Right now you can only select one character at a time.')
