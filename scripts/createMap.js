@@ -93,6 +93,33 @@ function createMap(color_dict, map) {
             map.getCanvas().style.cursor = '';
         });
             });
+    //function to create FDT URL given play and asln
+    function mkURL(play, asl) {
+        var base = 'https://www.folgerdigitaltexts.org/?chapter=5&play=';
+        var p_dict = {
+            'Henry VIII': 'H8',
+            'Henry IV, Part I': '1H4',
+            'Henry IV, Part II': '2H4',
+            'Henry V': 'H4',
+            'Henry VI, Part 1': '1H6',
+            'Henry VI, Part 2': '2H6',
+            'Henry VI, Part 3': '3H6',
+            'King John': 'Jn',
+            'Richard II': 'R2',
+            'Richard III': 'R3',
+            'Titus Andronicus': 'Tit',
+            'Julius Caesar': 'JC',
+            'Antony and Cleopatra': 'Ant',
+            'Coriolanus': 'Cor',
+            'Pericles': 'Per',
+            'Timon of Athens': 'Tim',
+            'Troilus and Cressida': 'Tro'
+        };
+        var p_abv = p_dict[play];
+        var l_base = '&loc=line-';
+        var l = l_base + asl
+        return base + p_abv + l
+    };
     // When a click event occurs on a feature in the labels layer generate a list of mentions
     map.on('click', 'labels', function (e) {
         console.log('clicked!');
@@ -111,10 +138,12 @@ function createMap(color_dict, map) {
                 }
                 var character = e.features[i].properties.character;
                 var asl_num = e.features[i].properties["a.s.l."];
+                var url = mkURL(play, asl_num);
                 var n_d = '<li>' + play + ', ' + 
                     //adding function to highlight one character's lines at a time 'ca' = custom attribute
                     '<a ca2=\"' + character + '\"' + 'class=\"char_select\"' + '>' + character + '</a>' 
-                    + ', ' + asl_num + '</li>';
+                    + ', ' + '<a href=\'' + url + '\' target=\'_blank\'>' + asl_num + '</a></li>';
+                console.log(n_d);
                 var descriptions = descriptions + n_d;
             }
         };
