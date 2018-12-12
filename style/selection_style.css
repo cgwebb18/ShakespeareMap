@@ -1,0 +1,102 @@
+
+#color_list, #play_list {
+    display: inline-block;
+    
+}
+
+#color_list {
+    text-align: right;
+}
+
+#submit {
+    display: block;
+    text-align: center;
+}
+
+ul {
+    list-style: none;
+}
+
+li {
+    border-style: solid;
+    border-width: thin;
+    font-size: 16px;
+    display: block;
+    margin: 5px;
+    padding: 5px;
+    border-radius: 3px;
+}
+
+#color_1 {
+    background-color: #800000;
+    border-color: #000;
+    color: #fff;
+}
+
+#color_1:hover {
+    background-color: #d30808;
+}
+
+#color_2 {
+    background-color: #1e87ea;
+}
+
+#color_2:hover {
+    background-color: #0859a5;
+}
+
+#color_3 {
+    background-color: #f44e30;
+}
+
+#color_3:hover {
+    background-color: #ad3722;
+}
+
+#color_4 {
+    background-color: #911eb4;
+    border-color: #000;
+    color: #fff;
+}
+
+#color_4:hover {
+    background-color: #67167f;
+}
+
+#color_5 {
+    background-color: #e6194B;
+    border-color: #000;
+    color: #fff;
+}
+
+#color_5:hover {
+    background-color: #bc143b;
+}
+
+#color_6 {
+    background-color: #ffff21;
+}
+
+#color_6:hover {
+    background-color: #bfbf1a;
+}
+
+#color_7 {
+    background-color: #5bce1c;
+}
+
+#color_7:hover {
+    background-color: #49a517;
+}
+
+#color_8 {
+    background-color: #000075;
+    border-color: #000;
+    color: #fff;
+}
+
+#color_8:hover {
+    background-color: #2121ff;
+}
+
+

@@ -1,0 +1,114 @@
+<!DOCTYPE HTML>
+<html>
+<!--create a page for someone to select the plays that they want to see mapped-->
+<head>
+    <title>ShakespeareMap</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" href="style/selection_style.css" title="style" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+</head>
+
+<body>
+    <h1>Map Shakespeare's Historical Plays</h1>
+    <h3>Assign a color to each play you would like to see mapped (up to 8):</h3>
+    <ul id='play_list'>Plays:
+    </ul>
+    <ul id="color_list"> Colors:
+        <li id='color_1' class='color' hex='#800000'>Play 1</li>
+        <li id='color_2' class='color' hex='#1e87ea'>Play 2</li>
+        <li id='color_3' class='color' hex='#f44e30'>Play 3</li>
+        <li id='color_4' class='color' hex='#911eb4'>Play 4</li>
+        <li id='color_5' class='color' hex='#e6194B'>Play 5</li>
+        <li id='color_6' class='color' hex='#ffff21'>Play 6</li>
+        <li id='color_7' class='color' hex='#49a517'>Play 7</li>
+        <li id='color_8' class='color' hex='#000075'>Play 8</li>
+    </ul>
+    <button id='submit'>Go</button>
+    <script type='text/javascript'>
+        
+        var plays = ['Titus Andronicus', 'Coriolanus', 'Troilus and Cressida', 'Pericles', 'Timon of Athens', 'Antony and Cleopatra', 'Julius Caesar']
+        var color_dict = {};
+        var current_play = '';
+        var current_color = '';
+        
+        $(document).ready(function() {
+            plays.forEach(function(item, index, array){
+                var fpath = './data/Labels/' + item + '_labels.geojson';
+                var title = document.createTextNode(item);
+                var li = document.createElement('li');
+                li.setAttribute('class', 'play');
+                li.setAttribute('id', ('play_' + index));
+                li.appendChild(title);
+                $('#play_list').append(li);
+            });
+            //click functions of .play and .color should be related so that the color list shows the associated plays dynamically
+            $('.play').click(function(e) {
+                //neither current_play nor current_color
+                if (current_color == '' && current_play == '') {
+                    current_play = e.target.textContent;
+                }
+                //current_color but no current_play
+                else if (current_color != '' && current_play == '') {
+                    t = document.getElementById(current_color);
+                    current_play = e.target.textContent;
+                    //check if the play has already been assigned to be a color
+                    if (current_play in color_dict) {
+                        c_id = color_dict[current_play];
+                        document.getElementById(c_id).textContent = "Play " + c_id.substr(6);
+                    }
+                    t.textContent = current_play;
+                    color_dict[current_play] = current_color;
+                }
+                //current_play but no current_color
+                else if (current_color == '' && current_play != '') {
+                    current_play = e.target.textContent;
+                }
+                //both current play and current color
+                else {
+                    current_color = '';
+                    current_play = e.target.textContent;
+                };
+            });
+            $('.color').click(function(e) {
+                if (e.target.textContent.substr(0, 4) != 'Play') {
+                        e.target.textContent = 'Play ' + e.target.id.substr(6);
+                };
+                //neither current_play nor current_color
+                if (current_color == '' && current_play == '') {
+                    current_color = e.target.id;
+                }
+                //current_color but no current_play
+                else if (current_color != '' && current_play == '') {
+                    current_color = e.target.id;
+                }
+                //current_play but no current_color
+                else if (current_color == '' && current_play != '') {
+                    if (current_play in color_dict){
+                        c_id = color_dict[current_play];
+                        document.getElementById(c_id).textContent = "Play " + c_id.substr(6);
+                    }
+                    e.target.textContent = current_play;
+                    current_color = e.target.id;
+                    color_dict[current_play] = current_color;
+                }
+                //both current play and current color
+                else {
+                    current_play = '';
+                    current_color = e.target.id;
+                };
+            });
+            $('#submit').click(function(){
+                for (var key in color_dict) {
+                    console.log(document.getElementById(color_dict[key]))
+                    color_dict[key] = document.getElementById(color_dict[key]).getAttribute('hex');
+                }
+                console.log(color_dict);
+            });
+        });
+        
+        
+        
+    </script>
+</body>
+</html>

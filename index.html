@@ -1,0 +1,142 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>ShakespeareMap</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" href="style/test_style.css" title="style" />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.css' rel='stylesheet' />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="scripts/createMap.js"></script>
+    <script src="scripts/p_chars.js"></script>
+
+</head>
+
+<body>
+    <div id='selection_popup' class='modal'>
+    <div class='modal-content'><h1>Map Shakespeare's Historical Plays</h1>
+    <h3>Assign colors to plays (up to 8):</h3>
+    <div id="lists+button">
+    <ul id='play_list'>Plays:
+    </ul>
+    <ul id="color_list"> Colors:
+        <li id='color_1' class='color' hex='#800000'>Play 1</li>
+        <li id='color_2' class='color' hex='#1e87ea'>Play 2</li>
+        <li id='color_3' class='color' hex='#f44e30'>Play 3</li>
+        <li id='color_4' class='color' hex='#911eb4'>Play 4</li>
+        <li id='color_5' class='color' hex='#e6194B'>Play 5</li>
+        <li id='color_6' class='color' hex='#ffff21'>Play 6</li>
+        <li id='color_7' class='color' hex='#49a517'>Play 7</li>
+        <li id='color_8' class='color' hex='#000075'>Play 8</li>
+    </ul>
+    <button id='submit'>Go</button>
+    </div>
+    <script type='text/javascript'>
+        var all_plays = ['Titus Andronicus', 'Coriolanus', 'Troilus and Cressida', 'Pericles', 'Timon of Athens', 'Antony and Cleopatra', 'Julius Caesar', 'Henry IV, Part I', 'Henry IV, Part II', 'Henry V', 'Henry VI, Part 1', 'Henry VI, Part 2', 'Henry VI, Part 3', 'Henry VIII', 'King John', 'Richard II', 'Richard III']
+        var color_dict = {};
+        var current_play = '';
+        var current_color = '';
+
+        $('.modal-content').ready(function() {
+            all_plays.forEach(function(item, index, array){
+                var fpath = './data/Labels/' + item + '_labels.geojson';
+                var title = document.createTextNode(item);
+                var li = document.createElement('li');
+                li.setAttribute('class', 'play');
+                li.setAttribute('id', ('play_' + index));
+                li.appendChild(title);
+                $('#play_list').append(li);
+            });
+            //click functions of .play and .color should be related so that the color list shows the associated plays dynamically
+            $('.play').click(function(e) {
+                //neither current_play nor current_color
+                if (current_color == '' && current_play == '') {
+                    current_play = e.target.textContent;
+                }
+                //current_color but no current_play
+                else if (current_color != '' && current_play == '') {
+                    t = document.getElementById(current_color);
+                    current_play = e.target.textContent;
+                    //check if the play has already been assigned to be a color
+                    if (current_play in color_dict) {
+                        c_id = color_dict[current_play];
+                        document.getElementById(c_id).textContent = "Play " + c_id.substr(6);
+                    }
+                    t.textContent = current_play;
+                    color_dict[current_play] = current_color;
+                }
+                //current_play but no current_color
+                else if (current_color == '' && current_play != '') {
+                    current_play = e.target.textContent;
+                }
+                //both current play and current color
+                else {
+                    current_color = '';
+                    current_play = e.target.textContent;
+                };
+            });
+            $('.color').click(function(e) {
+                if (e.target.textContent.substr(0, 4) != 'Play') {
+                        e.target.textContent = 'Play ' + e.target.id.substr(6);
+                };
+                //neither current_play nor current_color
+                if (current_color == '' && current_play == '') {
+                    current_color = e.target.id;
+                }
+                //current_color but no current_play
+                else if (current_color != '' && current_play == '') {
+                    current_color = e.target.id;
+                }
+                //current_play but no current_color
+                else if (current_color == '' && current_play != '') {
+                    if (current_play in color_dict){
+                        c_id = color_dict[current_play];
+                        document.getElementById(c_id).textContent = "Play " + c_id.substr(6);
+                    }
+                    e.target.textContent = current_play;
+                    current_color = e.target.id;
+                    color_dict[current_play] = current_color;
+                }
+                //both current play and current color
+                else {
+                    current_play = '';
+                    current_color = e.target.id;
+                };
+            });
+            
+        });
+    </script>
+    </div>
+    </div>
+        <div id="site_content">
+            <nav id='menu'></nav>
+            <div id='map'></div>
+    <script type="text/javascript">
+        //initialize map
+        //public token, change this to put it in production
+        mapboxgl.accessToken = 'pk.eyJ1IjoiY2d3ZWJiMTgiLCJhIjoiY2psd3FhMTMwMDFjNjN2b3Zmd3JyMWV2ZSJ9.r8XM2Wrgj6kueUh3Jdo3iw';
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/cgwebb18/cjm96xrni6jkp2snw5ggcrytj',
+            //TODO: change center + zoom based on points represented in map
+            center: [18.465510, 41.768844],
+            zoom: 3.8,
+            crossSourceCollisions: false
+        });
+        //function for when someone presses the submit button
+        $('#submit').click(function(){
+                for (var key in color_dict) {
+                    console.log(document.getElementById(color_dict[key]))
+                    color_dict[key] = document.getElementById(color_dict[key]).getAttribute('hex');
+                };
+                modal = document.getElementById('selection_popup');
+                modal.style.display = 'none';
+                createMap(color_dict, map);
+        });        
+    </script>
+
+        </div>
+</body>
+
+</html>
