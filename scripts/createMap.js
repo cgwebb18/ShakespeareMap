@@ -45,7 +45,7 @@ function createMap(color_dict, map) {
     });
     map.addSource('hm-1', {
             "type": 'raster',
-            "url": 'mapbox://cgwebb18.3ctwy9uc',
+            "url": 'mapbox://cgwebb18.5k4mo5s5',
             "tileSize": 256
         });
     map.addLayer({
@@ -261,6 +261,7 @@ function createMap(color_dict, map) {
         });
     };
     createMenu(LayerIds, plays, colors);
+    console.log($.get('https://api.mapbox.com/tilesets/cgwebb18?access_token=pk.eyJ1IjoiY2d3ZWJiMTgiLCJhIjoiY2ptOTc3aXZ6MDlqazNzam8yOWpxamJheiJ9._CBgYGJRpPAvo28H29lGww'))
 //    console.log(map.getStyle().layers);
 
 };
