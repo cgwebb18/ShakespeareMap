@@ -44,15 +44,8 @@ function createMap(color_dict, map) {
         "id": "labels",
         "type": "circle",
         "source": "labels",
-        "layout": {
-            "visibility": 'none'
-        }
-    });
-    map.addSource('hm-1', {
-            "type": 'raster',
-            "url": 'mapbox://cgwebb18.ccqxorep',
-        "paint": {
-            "circle-opacity": 0
+        'paint': {
+            'circle-opacity': 0
         }
     });
 //    map.addLayer({
@@ -114,7 +107,7 @@ function createMap(color_dict, map) {
 //    });
     map.addSource('hm-1', {
             "type": 'raster',
-            "url": 'mapbox://cgwebb18.5k4mo5s5',
+            "url": 'mapbox://cgwebb18.ccqxorep',
             "tileSize": 256
         });
     map.addLayer({
@@ -126,7 +119,6 @@ function createMap(color_dict, map) {
     layers.forEach(function(item, index, array){
         fpath = './data/Labels/' + item + '.geojson';
         layer_name = item;
-        console.log(layer_name);
         color = colors[index];
         map.addSource(layer_name, {
             'type': 'geojson',
@@ -248,7 +240,6 @@ function createMap(color_dict, map) {
                     //adding function to highlight one character's lines at a time 'ca' = custom attribute
                     '<a ca2=\"' + character + '\"' + 'class=\"char_select\"' + '>' + character + '</a>' 
                     + ', ' + '<a href=\'' + url + '\' target=\'_blank\'>' + asl_num + '</a></li>';
-                console.log(n_d);
                 var descriptions = descriptions + n_d;
             }
         };
