@@ -57,7 +57,6 @@ h5, h6
     font-family: 'Open Sans', sans-serif;
 }
 
-
 #menu a {
     font-size: 13px;
     color: #404040;
@@ -68,6 +67,11 @@ h5, h6
     text-decoration: none;
     border-bottom: 1px solid rgba(0,0,0,0.25);
     text-align: left;
+}
+
+div.option {
+    padding-top: 1em;
+    display: none;
 }
 
 

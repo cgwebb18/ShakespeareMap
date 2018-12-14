@@ -4,6 +4,9 @@ var visibleLayerIds = [];
 var c_place = '';
 var visiblePlays = [];
 var c_chars = [];
+var mapIDs = {'England':'ccqxorep', 'Mediterranean':'5k4mo5s5'};
+var overlay = '';
+var o_state = 0;
 
 function createMap(color_dict, map) {
     function filterbyplay(c_arr, p_arr) {
@@ -47,73 +50,6 @@ function createMap(color_dict, map) {
         'paint': {
             'circle-opacity': 0
         }
-    });
-//    map.addLayer({
-//       'id': 'mentions-heat',
-//        'type': 'heatmap',
-//        'source': 'labels',
-//        'maxzoom': 9,
-//        'paint': {
-//            'heatmap-weight': [
-//                'interpolate',
-//                ['linear'],
-//                ['case', 
-//                 ['has', ['get', 'play'], plays],
-//                 1,
-//                 ['!'['has', ['get', 'play'], plays]],
-//                 0
-//                ]
-//            ],
-//            // Increase the heatmap color weight weight by zoom level
-//            // heatmap-intensity is a multiplier on top of heatmap-weight
-//            "heatmap-intensity": [
-//                "interpolate",
-//                ["linear"],
-//                ["zoom"],
-//                0, 1,
-//                9, 3
-//            ],
-//            // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
-//            // Begin color ramp at 0-stop with a 0-transparancy color
-//            // to create a blur-like effect.
-//            "heatmap-color": [
-//                "interpolate",
-//                ["linear"],
-//                ["heatmap-density"],
-//                0, "rgba(33,102,172,0)",
-//                0.2, "rgb(103,169,207)",
-//                0.4, "rgb(209,229,240)",
-//                0.6, "rgb(253,219,199)",
-//                0.8, "rgb(239,138,98)",
-//                1, "rgb(178,24,43)"
-//            ],
-//            // Adjust the heatmap radius by zoom level
-//            "heatmap-radius": [
-//                "interpolate",
-//                ["linear"],
-//                ["zoom"],
-//                0, 2,
-//                9, 20
-//            ],
-//            // Transition from heatmap to circle layer by zoom level
-//            "heatmap-opacity": [
-//                "interpolate",
-//                ["linear"],
-//                ["zoom"],
-//                7, 1,
-//                9, 0
-//            ]
-//        }
-//    });
-    map.addSource('hm-1', {
-            "type": 'raster',
-            "url": 'mapbox://cgwebb18.ccqxorep',
-            "tileSize": 256
-        });
-    map.addLayer({
-            'id':  'hm-1',
-            'type': 'raster',
-            'source': 'hm-1'
     });
     //loop to add sources and layers for all plays
     layers.forEach(function(item, index, array){
@@ -282,6 +218,13 @@ function createMap(color_dict, map) {
             .setHTML(descriptions)
             .addTo(map);
     });
+    
+    //helper function to add multiple attributes in one line
+    function setAttributes(el, attrs) {
+          for(var key in attrs) {
+            el.setAttribute(key, attrs[key]);
+          }
+    };
 
     //helper function to remove specific item from an array
     function removeA(arr) {
@@ -364,15 +307,62 @@ function createMap(color_dict, map) {
             var menu = document.getElementById('menu');
             menu.appendChild(link);
         }
-        h_toggle = $('<a id=\'h_toggle1\'></a>').text('Toggle Historical Map').click(function() {
-            var v = map.getLayoutProperty('hm-1', 'visibility');
-            if (v === 'visible') {
-                map.setLayoutProperty('hm-1', 'visibility', 'none');
-            } else {
-                map.setLayoutProperty('hm-1', 'visibility', 'visible');
-            }
-        });
-        $('#menu').append(h_toggle);
+        $('#menu').append('<a id=\'overlays\'>Toggle Historical Maps</a>');
+        
+        
+//        $('#overlays').click(function() {
+//            
+//        });
+        
+        //loop to add map overlay options
+        for (map_name in mapIDs) {
+            var base_url = 'mapbox://cgwebb18.';
+            var id = mapIDs[map_name];
+            console.log(id, map_name);
+            map.addSource(map_name, {
+                "type": 'raster',
+                "url": base_url + id,
+                "tileSize": 256
+            });
+            map.addLayer({
+                'id':  map_name,
+                'type': 'raster',
+                'source': map_name,
+                'layout': {
+                    'visibility': 'none'
+                }
+            });
+            var option = document.createElement('div');
+            option.setAttribute('class', 'option');
+            option.setAttribute('style', 'padding-top: 1em;')
+            var btn = document.createElement('input');
+            var lbl = document.createElement('label');
+            lbl.setAttribute('for', id);
+            lbl.textContent = map_name;
+            btn.setAttribute('id', map_name);
+            btn.setAttribute('type', 'radio');
+            btn.setAttribute('name', 'overlay');
+            btn.setAttribute('style', 'display: inline-block; margin-right: 0.5em');
+            //should toggle this map layer)
+            btn.onclick = function(e) {
+                if (overlay === '') {
+                    map.setLayoutProperty(e.target.id, 'visibility', 'visible');
+                }
+                else if (overlay === e.target.id) {
+                    map.setLayoutProperty(overlay, 'visibility', 'none');
+                    document.getElementById(e.target.id).checked = false;
+                }
+                else {
+                    map.setLayoutProperty(overlay, 'visibility', 'none');
+                    map.setLayoutProperty(e.target.id, 'visibility', 'visible');
+                }
+                overlay = e.target.id;
+            };
+            
+            option.appendChild(btn);
+            option.appendChild(lbl);
+            document.getElementById('overlays').appendChild(option);
+        };
         
         //char_select function
         $(document).on('click', '.char_select', function () {
