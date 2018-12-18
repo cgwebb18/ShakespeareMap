@@ -8,15 +8,30 @@ html
 body
 { font: normal .80em 'trebuchet ms', arial, sans-serif;
   background: #F0EFE2 url(background.png) repeat;
-  color: #000;}
+  color: #000;
+}
+
 .mapboxgl-popup {
  max-height: 400px;
  max-width: 400px;
  font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+ border-radius: 2em;
 }
+
 .mapboxgl-popup-content {
- overflow-y: scroll;
+  overflow-y: auto;
 }
+
+/*
+#clicked {
+    position: absolute;
+    overflow-y: auto;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+}
+*/
+
 p
 { padding: 0 0 20px 0;
   line-height: 1.7em;}
@@ -257,9 +272,6 @@ ul {
     font-size: 20px;
 }
 
-.mapboxgl-popup-content {
-    overflow-y: scroll;
-}
 
 #lists+button {
     display: inline-block;
