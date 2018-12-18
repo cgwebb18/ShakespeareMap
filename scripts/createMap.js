@@ -331,7 +331,7 @@ function createMap(color_dict, map) {
                 'layout': {
                     'visibility': 'none'
                 }
-            });
+            }, layers[0]);
             var option = document.createElement('div');
             option.setAttribute('class', 'option');
             option.setAttribute('style', 'padding-top: 1em;')
