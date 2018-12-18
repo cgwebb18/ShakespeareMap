@@ -308,7 +308,9 @@ function createMap(color_dict, map) {
             menu.appendChild(link);
         }
         $('#menu').append('<a id=\'overlays\'>Toggle Historical Maps</a>');
-        
+        var content = document.createElement('div');
+        content.setAttribute('id', 'content');
+        content.setAttribute('style', 'display: none;')
         
 //        $('#overlays').click(function() {
 //            
@@ -333,8 +335,8 @@ function createMap(color_dict, map) {
                 }
             }, layers[0]);
             var option = document.createElement('div');
-            option.setAttribute('class', 'option');
-            option.setAttribute('style', 'padding-top: 1em;')
+            option.setAttribute('class', 'o_option');
+            option.setAttribute('style', 'padding-top: 1em; padding-left: 1em;');
             var btn = document.createElement('input');
             var lbl = document.createElement('label');
             lbl.setAttribute('for', id);
@@ -361,8 +363,18 @@ function createMap(color_dict, map) {
             
             option.appendChild(btn);
             option.appendChild(lbl);
-            document.getElementById('overlays').appendChild(option);
+            content.appendChild(option);
         };
+        document.getElementById('menu').appendChild(content);
+        $(document).on('click', '#overlays', function() {
+            var v = document.getElementById('content').style.display;
+            if (v === 'none'){
+                document.getElementById('content').style.display = 'block';
+            }
+            else {
+                document.getElementById('content').style.display = 'none';
+            }
+        });
         
         //char_select function
         $(document).on('click', '.char_select', function () {
