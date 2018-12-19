@@ -20,27 +20,61 @@
     <div id="lists+button">
     <ul id='play_list'>Plays:
     </ul>
+    <div id='c_container'>
+    <nav id='d_menu'></nav>
     <ul id="color_list"> Colors:
-        <li id='color_1' class='color' hex='#800000'>Play 1</li>
-        <li id='color_2' class='color' hex='#1e87ea'>Play 2</li>
-        <li id='color_3' class='color' hex='#f44e30'>Play 3</li>
-        <li id='color_4' class='color' hex='#911eb4'>Play 4</li>
-        <li id='color_5' class='color' hex='#e6194B'>Play 5</li>
-        <li id='color_6' class='color' hex='#ffff21'>Play 6</li>
-        <li id='color_7' class='color' hex='#49a517'>Play 7</li>
-        <li id='color_8' class='color' hex='#000075'>Play 8</li>
+        <li id='cl_color_1' class='color' hex='#800000'></li>
+        <li id='cl_color_2' class='color' hex='#1e87ea'></li>
+        <li id='cl_color_3' class='color' hex='#f44e30'></li>
+        <li id='cl_color_4' class='color' hex='#911eb4'></li>
+        <li id='cl_color_5' class='color' hex='#e6194B'></li>
+        <li id='cl_color_6' class='color' hex='#ffff21'></li>
+        <li id='cl_color_7' class='color' hex='#49a517'></li>
+        <li id='cl_color_8' class='color' hex='#000075'></li>
     </ul>
+    </div>
     <button id='submit'>Go</button>
     </div>
     <script type='text/javascript'>
         var all_plays = ['Titus Andronicus', 'Coriolanus', 'Troilus and Cressida', 'Pericles', 'Timon of Athens', 'Antony and Cleopatra', 'Julius Caesar', 'Henry IV, Part I', 'Henry IV, Part II', 'Henry V', 'Henry VI, Part 1', 'Henry VI, Part 2', 'Henry VI, Part 3', 'Henry VIII', 'King John', 'Richard II', 'Richard III']
         var color_dict = {};
         var current_play = '';
-        var current_color = '';
+        var s = document.getElementById('submit');
+        var c_list = document.getElementById('color_list');
+        var d_menu = document.getElementById('d_menu');
+        var color_ref = {
+                '#800000':'color_1',
+                '#1e87ea':'color_2',
+                '#f44e30':'color_3',
+                '#911eb4':'color_4',
+                '#e6194B':'color_5',
+                '#ffff21':'color_6',
+                '#49a517':'color_7',
+                '#000075':'color_8'
+            };
+        
+        function createDummyMenu(cd){
+            //first delete the old menu
+            var d_menu = document.getElementById('d_menu');
+            while (d_menu.firstChild) {
+                d_menu.removeChild(d_menu.firstChild);
+            };
+            var ps = Object.keys(cd);
+            var cs = Object.values(cd);
+            //create the new menu
+            for (var i = 0; i < ps.length; i++) {
+                var id = color_ref[cs[i]];
+                var link = document.createElement('a');
+                link.setAttribute('id', id);
+                link.className = '';
+                link.textContent = ps[i];
+                d_menu.appendChild(link);
+            }
+
+        };
 
         $('.modal-content').ready(function() {
             all_plays.forEach(function(item, index, array){
-                var fpath = './data/Labels/' + item + '_labels.geojson';
                 var title = document.createTextNode(item);
                 var li = document.createElement('li');
                 li.setAttribute('class', 'play');
@@ -50,59 +84,45 @@
             });
             //click functions of .play and .color should be related so that the color list shows the associated plays dynamically
             $('.play').click(function(e) {
-                //neither current_play nor current_color
-                if (current_color == '' && current_play == '') {
-                    current_play = e.target.textContent;
+                current_play = e.target.textContent;
+                if (current_play in color_dict) {
+                    delete color_dict[current_play];
                 }
-                //current_color but no current_play
-                else if (current_color != '' && current_play == '') {
-                    t = document.getElementById(current_color);
-                    current_play = e.target.textContent;
-                    //check if the play has already been assigned to be a color
-                    if (current_play in color_dict) {
-                        c_id = color_dict[current_play];
-                        document.getElementById(c_id).textContent = "Play " + c_id.substr(6);
-                    }
-                    t.textContent = current_play;
-                    color_dict[current_play] = current_color;
-                }
-                //current_play but no current_color
-                else if (current_color == '' && current_play != '') {
-                    current_play = e.target.textContent;
-                }
-                //both current play and current color
-                else {
-                    current_color = '';
-                    current_play = e.target.textContent;
-                };
+                for(var i = 0; i < c_list.children.length; i++){
+                    c_list.children[i].style.opacity = '1';   
+                };              
+                Object.values(color_dict).forEach(function(item, index, array){
+                    var cl_id = 'cl_' + color_ref[item];
+                    document.getElementById(cl_id).style.opacity = '0.2';
+                });
+                c_list.style.display = 'inline-block';
+                d_menu.style.display = 'none';
+                s.style.display = 'none';
             });
+            
             $('.color').click(function(e) {
-                if (e.target.textContent.substr(0, 4) != 'Play') {
-                        e.target.textContent = 'Play ' + e.target.id.substr(6);
+                //if color has already been assigned, just switch the assignment
+                var c_h = e.target.getAttribute('hex');
+                if (current_play != ''){
+                    color_dict[current_play] = c_h;
                 };
-                //neither current_play nor current_color
-                if (current_color == '' && current_play == '') {
-                    current_color = e.target.id;
-                }
-                //current_color but no current_play
-                else if (current_color != '' && current_play == '') {
-                    current_color = e.target.id;
-                }
-                //current_play but no current_color
-                else if (current_color == '' && current_play != '') {
-                    if (current_play in color_dict){
-                        c_id = color_dict[current_play];
-                        document.getElementById(c_id).textContent = "Play " + c_id.substr(6);
+                console.log(Object.values(color_dict));
+                if (Object.values(color_dict).indexOf(c_h) != -1) {
+                    for (var k in color_dict) {
+                        if (color_dict[k] == c_h) {
+                            console.log(color_dict[k])
+                            delete color_dict[k];
+                        }
                     }
-                    e.target.textContent = current_play;
-                    current_color = e.target.id;
-                    color_dict[current_play] = current_color;
-                }
-                //both current play and current color
-                else {
-                    current_play = '';
-                    current_color = e.target.id;
+                    color_dict[current_play] = c_h;
                 };
+                c_list.style.display = 'none';
+                s.style.display = 'block';
+                if (Object.keys(color_dict).length != 0) {
+                    //console.log('here');
+                    createDummyMenu(color_dict);
+                    document.getElementById('d_menu').style.display = 'inline-block';
+                }
             });
             
         });
@@ -126,10 +146,10 @@
         });
         //function for when someone presses the submit button
         $('#submit').click(function(){
-                for (var key in color_dict) {
-                    console.log(document.getElementById(color_dict[key]))
-                    color_dict[key] = document.getElementById(color_dict[key]).getAttribute('hex');
-                };
+//                for (var key in color_dict) {
+//                    console.log(document.getElementById(color_dict[key]))
+//                    color_dict[key] = document.getElementById(color_dict[key]).getAttribute('hex');
+//                };
                 modal = document.getElementById('selection_popup');
                 modal.style.display = 'none';
                 createMap(color_dict, map);

@@ -65,42 +65,43 @@ function createMap(color_dict, map) {
             'type': 'circle',
             'source': layer_name
         });
-        map.addLayer({
-            'id': layer_name + '-heat',
-            'type': 'heatmap',
-            'source': layer_name,
-            'maxzoom': 9,
-            'paint': {
-                // Increase the heatmap color weight weight by zoom level
-                // heatmap-intensity is a multiplier on top of heatmap-weight
-                "heatmap-intensity": [
-                    "interpolate",
-                    ["linear"],
-                    ["zoom"],
-                    0, 1,
-                    9, 3
-                ],
-                // Adjust the heatmap radius by zoom level
-                "heatmap-radius": [
-                    "interpolate",
-                    ["linear"],
-                    ["zoom"],
-                    0, 2,
-                    9, 20
-                ],
-                // Transition from heatmap to circle layer by zoom level
-                "heatmap-opacity": [
-                    "interpolate",
-                    ["linear"],
-                    ["zoom"],
-                    7, 1,
-                    9, 0
-                ]
-            },
-            "layout": {
-                "visibility": 'none'
-            } 
-        });
+        //adding heat map layers
+//        map.addLayer({
+//            'id': layer_name + '-heat',
+//            'type': 'heatmap',
+//            'source': layer_name,
+//            'maxzoom': 9,
+//            'paint': {
+//                // Increase the heatmap color weight weight by zoom level
+//                // heatmap-intensity is a multiplier on top of heatmap-weight
+//                "heatmap-intensity": [
+//                    "interpolate",
+//                    ["linear"],
+//                    ["zoom"],
+//                    0, 1,
+//                    9, 3
+//                ],
+//                // Adjust the heatmap radius by zoom level
+//                "heatmap-radius": [
+//                    "interpolate",
+//                    ["linear"],
+//                    ["zoom"],
+//                    0, 2,
+//                    9, 20
+//                ],
+//                // Transition from heatmap to circle layer by zoom level
+//                "heatmap-opacity": [
+//                    "interpolate",
+//                    ["linear"],
+//                    ["zoom"],
+//                    7, 1,
+//                    9, 0
+//                ]
+//            },
+//            "layout": {
+//                "visibility": 'none'
+//            } 
+//        });
         map.setPaintProperty(layer_name, 'circle-color', color);
         //changes the mouse when it encounters a label
         map.on('mouseenter', layer_name, function () {
@@ -290,22 +291,24 @@ function createMap(color_dict, map) {
                 };
                 visibleLayerToggle(clickedLayer);
             };
-            link.ondblclick = function(e) {
-                //clickedLayer ~ Coriolanus_labels (refers to layer)
-                //clickedLayerID ~ color_2 (refers to link on the menu)
-                var clickedLayer = this.getAttribute('layer_id') + '-heat';
-                var clickedLayerID = this.getAttribute('id');
-                let el = document.getElementById(clickedLayerID);
-                var viz = map.getLayoutProperty(clickedLayer, 'visibility')
-                if (viz === 'visible') {
-                    map.setLayoutProperty(clickedLayer, 'visibility', 'none')
-                }
-                else {
-                    map.setLayoutProperty(clickedLayer, 'visibility', 'visible')
-                }
-            };
+            //heatmap on double click
+//            link.ondblclick = function(e) {
+//                //clickedLayer ~ Coriolanus_labels (refers to layer)
+//                //clickedLayerID ~ color_2 (refers to link on the menu)
+//                var clickedLayer = this.getAttribute('layer_id') + '-heat';
+//                var clickedLayerID = this.getAttribute('id');
+//                let el = document.getElementById(clickedLayerID);
+//                var viz = map.getLayoutProperty(clickedLayer, 'visibility')
+//                if (viz === 'visible') {
+//                    map.setLayoutProperty(clickedLayer, 'visibility', 'none')
+//                }
+//                else {
+//                    map.setLayoutProperty(clickedLayer, 'visibility', 'visible')
+//                }
+//            };
             var menu = document.getElementById('menu');
             menu.appendChild(link);
+            menu.style.display = 'inline-block';
         }
         $('#menu').append('<a id=\'overlays\'>Toggle Historical Maps</a>');
         var content = document.createElement('div');
