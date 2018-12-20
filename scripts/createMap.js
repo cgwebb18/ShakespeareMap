@@ -311,15 +311,29 @@ function createMap(color_dict, map) {
             menu.style.display = 'inline-block';
         }
         $('#menu').append('<a id=\'overlays\'>Toggle Historical Maps</a>');
-        var content = document.createElement('div');
-        content.setAttribute('id', 'content');
-        content.setAttribute('style', 'display: none;');
+        var map_options = document.createElement('ul');
+        map_options.setAttribute('id', 'map_options');
+        map_options.setAttribute('style', 'display: none; list-style: none;');
         
+        //opacity slider
+        var o_slide = document.createElement('input');
+        o_slide.setAttribute('type', 'range');
+        o_slide.setAttribute('min', '0');
+        o_slide.setAttribute('max', '100');
+        o_slide.setAttribute('step', '1');
+        o_slide.setAttribute('value', '100');
+        o_slide.setAttribute('width', '80%');
+        o_slide.className = 'slider';
+        o_slide.onchange = function (e) {
+            var v = (parseInt(e.target.value))/100;
+            if (overlay != ''){
+                map.setPaintProperty(overlay, 'raster-opacity', v);
+            }
+        };
         //loop to add map overlay options
         for (map_name in mapIDs) {
             var base_url = 'mapbox://cgwebb18.';
             var id = mapIDs[map_name];
-            console.log(id, map_name);
             map.addSource(map_name, {
                 "type": 'raster',
                 "url": base_url + id,
@@ -333,45 +347,43 @@ function createMap(color_dict, map) {
                     'visibility': 'none'
                 }
             }, layers[0]);
-            var option = document.createElement('div');
+            var option = document.createElement('li');
             option.setAttribute('class', 'o_option');
-            option.setAttribute('style', 'padding-top: 1em; padding-left: 1em;');
-            var btn = document.createElement('input');
-            var lbl = document.createElement('label');
-            lbl.setAttribute('for', id);
-            lbl.textContent = map_name;
-            btn.setAttribute('id', map_name);
-            btn.setAttribute('type', 'radio');
-            btn.setAttribute('name', 'overlay');
-            btn.setAttribute('style', 'display: inline-block; margin-right: 0.5em');
-            //should toggle this map layer)
-            btn.onclick = function(e) {
+            option.textContent = map_name;
+            option.setAttribute('id', map_name);
+            //should toggle this map layer
+            option.onclick = function(e) {
                 if (overlay === '') {
                     map.setLayoutProperty(e.target.id, 'visibility', 'visible');
+                    document.getElementById(e.target.id).className = 'i_option';
+                    
+                    document.getElementById('menu').appendChild(o_slide);
                 }
                 else if (overlay === e.target.id) {
                     map.setLayoutProperty(overlay, 'visibility', 'none');
-                    document.getElementById(e.target.id).checked = false;
+                    document.getElementById(e.target.id).className = 'o_option';
+                    document.getElementById('o_slide').style.display = 'none';
                 }
                 else {
                     map.setLayoutProperty(overlay, 'visibility', 'none');
+                    document.getElementById(overlay).className = 'o_option';
                     map.setLayoutProperty(e.target.id, 'visibility', 'visible');
+                    document.getElementById(e.target.id).className = 'i_option';
                 }
                 overlay = e.target.id;
             };
             
-            option.appendChild(btn);
-            option.appendChild(lbl);
-            content.appendChild(option);
+            map_options.appendChild(option);
         };
-        document.getElementById('menu').appendChild(content);
+        
+        document.getElementById('menu').appendChild(map_options);
         $(document).on('click', '#overlays', function() {
-            var v = document.getElementById('content').style.display;
+            var v = document.getElementById('map_options').style.display;
             if (v === 'none'){
-                document.getElementById('content').style.display = 'block';
+                document.getElementById('map_options').style.display = 'block';
             }
             else {
-                document.getElementById('content').style.display = 'none';
+                document.getElementById('map_options').style.display = 'none';
             }
         });
         

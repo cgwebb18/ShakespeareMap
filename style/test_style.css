@@ -21,12 +21,6 @@ body
   overflow-y: auto;
 }
 
-p
-{ padding: 0 0 20px 0;
-  line-height: 1.7em;}
-
-img
-{ border: 0;}
 
 h1, h2, h3, h4, h5, h6 { 
   font: 175% 'Georgia', sans-serif;
@@ -75,8 +69,7 @@ h5, h6
     font-size: 13px;
     display: inherit;
     margin: 0;
-    padding: 0;
-    padding: 10px;
+    padding: 5% 5%;
     text-decoration: none;
     border-bottom: 1px solid rgba(0,0,0,0.25);
     text-align: left;
@@ -254,6 +247,7 @@ h5, h6
 #submit {
     display: none;
     text-align: center;
+    border-radius: 0.5em;
     height: 25px;
     width: 50px;
     margin-left: 50%;
@@ -298,4 +292,62 @@ ul {
 .mapboxgl-popup-content {
     overflow-y: auto;
     border-radius: 6px;
+}
+
+#map_options {
+    height: 3em;
+    overflow-y: scroll;
+}
+
+#map_options li{
+    font-size: 0.7em;
+    padding: 2% 5%;
+}
+
+.o_option {
+    color: #000;
+    background: #fff;
+}
+
+.i_option {
+    color: #fff;
+    background: #0000FF;
+
+}
+
+.i_option:hover {
+    color: #fff;
+    background: #0000FF;
+    opacity: 0.5;
+}
+
+/*https://www.w3schools.com/howto/howto_js_rangeslider.asp*/
+.slider {
+  -webkit-appearance: none;
+  width: 80%;
+  height: 10px;
+  border-radius: 5px;   
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%; 
+  background: #0000FF;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #4CAF50;
+  cursor: pointer;
 }
