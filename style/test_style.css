@@ -9,14 +9,17 @@ body
 { font: normal .80em 'trebuchet ms', arial, sans-serif;
   background: #F0EFE2 url(background.png) repeat;
   color: #000;}
+
 .mapboxgl-popup {
  max-height: 400px;
  max-width: 400px;
- font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+ font: 12px/20px 'Georgia', sans-serif;
 }
+
 .mapboxgl-popup-content {
  overflow-y: scroll;
 }
+
 p
 { padding: 0 0 20px 0;
   line-height: 1.7em;}
@@ -25,7 +28,7 @@ img
 { border: 0;}
 
 h1, h2, h3, h4, h5, h6 { 
-  font: italic 175% 'Apple Chancery', arial, sans-serif;
+  font: 175% 'Georgia', sans-serif;
   color: #000;
   margin: 0 0 15px 0;
   padding: 15px 0 5px 0;
@@ -33,16 +36,22 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h2
-{ font: normal 175% 'century gothic', arial, sans-serif;}
+{ font: normal 160% 'Georgia', arial, sans-serif;}
 
 h4, h5, h6
 { margin: 0;
   padding: 0 0 5px 0;
-  font: normal 120% arial, sans-serif;}
+  font: normal 120% 'Georgia', arial, sans-serif;}
 
 h5, h6
-{ font: italic 95% arial, sans-serif;
+{ font: 95% 'Georgia', arial, sans-serif;
   padding: 0 0 15px 0;}
+
+#lists-button {
+    padding: 2em 0 2em 0;
+    border-radius: 5px;
+    background: #af8148;
+}
 
 
 #menu {
@@ -55,22 +64,11 @@ h5, h6
     width: auto;
     height: auto;
     border: 1px solid rgba(0,0,0,0.4);
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Georgia', sans-serif;
+    font-size: 20px;
     display: none;
 }
 
-/*
-#d_menu a {
-    font-size: 13px;
-    display: block;
-    margin: 0;
-    padding: 0;
-    padding: 10px;
-    text-decoration: none;
-    border-bottom: 1px solid rgba(0,0,0,0.25);
-    text-align: left;
-}
-*/
 #menu a {
     border-radius: 3px;
     font-size: 13px;
@@ -82,11 +80,17 @@ h5, h6
     border-bottom: 1px solid rgba(0,0,0,0.25);
     text-align: left;
 }
+
+#d_menu {
+    font-family: 'Georgia', sans-serif;
+    font-size: 20px;
+}
+
 #d_menu a {
     border-radius: 3px;
     font-size: 13px;
     display: block;
-    margin: 0;
+    margin-right: 2em;
     padding: 0;
     padding: 10px;
     text-decoration: none;
@@ -210,11 +214,11 @@ h5, h6
 
 /* Modal Content/Box */
 .modal-content {
-    background-color: #ce8665;
+    background-color: #D5A15F;
     margin: 5% auto; /* 15% from the top and centered */
     padding: 20px;
     border: 1px solid #888;
-    width: 50%;
+    width: 35%;
     border-radius: 15px;
 }
 
@@ -240,13 +244,14 @@ h5, h6
 }
 
 #color_list {
-    text-align: right;
+    font-family: 'Georgia', sans-serif;
+    margin-right: 4em;
     list-style: none;
-    display: none;
+    display: inline-block;
 }
 
 #submit {
-    display: block;
+    display: none;
     text-align: center;
     height: 25px;
     width: 50px;
@@ -255,16 +260,17 @@ h5, h6
 
 #c_container, #play_list {
     display: inline-block;
-    margin-left: 20%;
+    margin-left: 10%;
 }
 
 #c_container {
     float: right;
-    margin-right: 25%;
+    margin-right: 2em;
     margin-left: 0em;
 }
 
 #play_list {
+    font-family: 'Georgia', sans-serif;
     list-style: none;
     height: 300px;
     overflow-y: scroll;
@@ -291,8 +297,4 @@ ul {
 .mapboxgl-popup-content {
     overflow-y: auto;
     border-radius: 6px;
-}
-
-#lists+button {
-    display: inline-block;
 }
