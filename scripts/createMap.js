@@ -273,22 +273,21 @@ function createMap(color_dict, map) {
             var link = document.createElement('a');
             link.setAttribute('id', id);
             link.setAttribute('layer_id', LIds[i]);
-            link.className = '';
+            link.className = 'active';
             link.textContent = ps[i];
 
 
-            link.onclick = function(e) {
+            link.onclick = function() {
                 //clickedLayer ~ Coriolanus_labels (refers to layer)
                 //clickedLayerID ~ color_2 (refers to link on the menu)
                 var clickedLayer = this.getAttribute('layer_id');
                 var clickedLayerID = this.getAttribute('id');
-                let el = document.getElementById(clickedLayerID);
-                if (el.className == '') {
-                    el.className = 'inactive'
+                if (this.className === 'active') {
+                    this.className = 'inactive';
                 }
-                else{
-                    el.className = ''
-                };
+                else {
+                    this.className = "active"
+                }
                 visibleLayerToggle(clickedLayer);
             };
             //heatmap on double click

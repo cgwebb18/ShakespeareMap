@@ -192,8 +192,7 @@ h5, h6
 }
 
 #color_1.inactive, #color_2.inactive, #color_3.inactive, #color_4.inactive, #color_5.inactive, #color_6.inactive, #color_7.inactive, #color_8.inactive {
-    background-color: #fff;
-    color: #000;
+    opacity: 0.7;
 }
 
 .modal {
