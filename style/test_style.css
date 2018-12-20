@@ -311,13 +311,13 @@ ul {
 
 .i_option {
     color: #fff;
-    background: #0000FF;
+    background: #00688B;
 
 }
 
 .i_option:hover {
     color: #fff;
-    background: #0000FF;
+    background: #00688B;
     opacity: 0.5;
 }
 
@@ -340,7 +340,7 @@ ul {
   width: 15px;
   height: 15px;
   border-radius: 50%; 
-  background: #0000FF;
+  background: #00688B;
   cursor: pointer;
 }
 

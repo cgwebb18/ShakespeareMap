@@ -352,13 +352,19 @@ function createMap(color_dict, map) {
             option.setAttribute('class', 'o_option');
             option.textContent = map_name;
             option.setAttribute('id', map_name);
+            var l_overlay = ''
             //should toggle this map layer
             option.onclick = function(e) {
+                //store the last overlay so we can check if we need to append this for the first time or just change the display
                 if (overlay === '') {
                     map.setLayoutProperty(e.target.id, 'visibility', 'visible');
                     document.getElementById(e.target.id).className = 'i_option';
-                    
-                    document.getElementById('menu').appendChild(o_slide);
+                    if (l_overlay === '') {
+                        document.getElementById('menu').appendChild(o_slide);
+                    }
+                    else {
+                        document.getElementById('o_slide').style.display = 'inline-block';
+                    }
                 }
                 else if (overlay === e.target.id) {
                     map.setLayoutProperty(overlay, 'visibility', 'none');
@@ -372,7 +378,15 @@ function createMap(color_dict, map) {
                     document.getElementById(e.target.id).className = 'i_option';
                     document.getElementById('o_slide').style.display = 'inline-block';
                 }
-                overlay = e.target.id;
+                l_overlay = overlay;
+                if (overlay === e.target.id) {
+                    overlay = '';
+                }
+                else {
+                    overlay = e.target.id;
+                }
+                
+                
             };
             
             map_options.appendChild(option);
