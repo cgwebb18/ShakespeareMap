@@ -319,13 +319,14 @@ function createMap(color_dict, map) {
         var o_slide = document.createElement('input');
         o_slide.setAttribute('type', 'range');
         o_slide.setAttribute('min', '0');
-        o_slide.setAttribute('max', '100');
+        o_slide.setAttribute('max', '5');
         o_slide.setAttribute('step', '1');
-        o_slide.setAttribute('value', '100');
+        o_slide.setAttribute('value', '5');
         o_slide.setAttribute('width', '80%');
+        o_slide.setAttribute('id', 'o_slide');
         o_slide.className = 'slider';
         o_slide.onchange = function (e) {
-            var v = (parseInt(e.target.value))/100;
+            var v = (parseInt(e.target.value))/5;
             if (overlay != ''){
                 map.setPaintProperty(overlay, 'raster-opacity', v);
             }
@@ -369,6 +370,7 @@ function createMap(color_dict, map) {
                     document.getElementById(overlay).className = 'o_option';
                     map.setLayoutProperty(e.target.id, 'visibility', 'visible');
                     document.getElementById(e.target.id).className = 'i_option';
+                    document.getElementById('o_slide').style.display = 'inline-block';
                 }
                 overlay = e.target.id;
             };
