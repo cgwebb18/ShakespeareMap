@@ -4,7 +4,7 @@ var visibleLayerIds = [];
 var c_place = '';
 var visiblePlays = [];
 var c_chars = [];
-var mapIDs = {'England':'ccqxorep', 'Mediterranean':'5k4mo5s5', 'London': 'b3drdggn'};
+var mapIDs = {'England':'ccqxorep', 'Mediterranean':'5k4mo5s5', 'London': 'b3drdggn', 'Greece': 'dzenz2dr', 'East Mediterranean': 'dkby1y88'};
 var overlay = '';
 var o_state = 0;
 
