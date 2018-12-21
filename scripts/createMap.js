@@ -4,7 +4,7 @@ var visibleLayerIds = [];
 var c_place = '';
 var visiblePlays = [];
 var c_chars = [];
-var mapIDs = {'England':'ccqxorep', 'Mediterranean':'5k4mo5s5'};
+var mapIDs = {'England':'ccqxorep', 'Mediterranean':'5k4mo5s5', 'London': 'b3drdggn'};
 var overlay = '';
 var o_state = 0;
 
@@ -162,7 +162,7 @@ function createMap(color_dict, map) {
         var place = c_place;
         var play_acc = []
         var l = e.features.length;
-        var descriptions = '<h3>' + place + '</h3><ul><li>Play, Character, Act.Scene.Line:</li>';
+        var descriptions = '<h3>' + place + '</h3><ul>';
         for (i = 0; i < l; i++){
             var play = e.features[i].properties.play;
             var id = play + '_labels';
@@ -174,7 +174,7 @@ function createMap(color_dict, map) {
                 var character = e.features[i].properties.character;
                 var asl_num = e.features[i].properties["a.s.l."];
                 var url = mkURL(play, asl_num);
-                var n_d = '<li>' + play + ', ' + 
+                var n_d = '<li class=\'ref\'>' + play + ', ' + 
                     //adding function to highlight one character's lines at a time 'ca' = custom attribute
                     '<a ca2=\"' + character + '\"' + 'class=\"char_select\"' + '>' + character + '</a>' 
                     + ', ' + '<a href=\'' + url + '\' target=\'_blank\'>' + asl_num + '</a></li>';
