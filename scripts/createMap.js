@@ -15,7 +15,7 @@ function createMap(color_dict, map) {
             var item = c_arr[i];
             var c = item[0];
             var p = item[1];
-            if (p_arr.includes(p)) {
+            if (p_arr.indexOf(p) > -1) {
                 acc.push(item);
             };
         }
@@ -157,7 +157,7 @@ function createMap(color_dict, map) {
     };
     // When a click event occurs on a feature in the labels layer generate a list of mentions
     map.on('click', 'labels', function (e) {
-        console.log('clicked!');
+        console.log(e.features);
         var coordinates = e.features[0].geometry.coordinates.slice();
         var place = c_place;
         var play_acc = []
