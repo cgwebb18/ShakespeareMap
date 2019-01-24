@@ -222,10 +222,8 @@ function createMap(color_dict, map) {
         back_button.innerHTML = 'Back to Selection';
         $(document).on('click', '#back', function () {
             layers.forEach(function(item, index, array){
-                fpath = './data/Labels/' + item + '.geojson';
-                layer_name = item;
-                map.removeLayer(layer_name);
-                map.removeSource(layer_name);
+                map.removeLayer(item);
+                map.removeSource(item);
             });
             map.removeLayer('labels');
             map.removeSource('labels');
@@ -238,10 +236,11 @@ function createMap(color_dict, map) {
             document.getElementById('color_list').style.display = 'inline-block';
             document.getElementById('selection_popup').style.display = 'block';
             visibleLayerIds = [];
+            layers = [];
             LayerIds = [];
             plays = [];
             colors = [];
-            var color_dict = {};
+            color_dict = {};
             while (menu.firstChild) {
                 menu.removeChild(menu.firstChild);
             };
