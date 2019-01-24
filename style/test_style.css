@@ -7,7 +7,7 @@ html
 
 body
 { font: normal .80em 'trebuchet ms', arial, sans-serif;
-  background: #F0EFE2 url(background.png) repeat;
+  background: #F0EFE2;
   color: #000;
 }
 
@@ -21,26 +21,14 @@ body
   overflow-y: auto;
 }
 
-
-h1, h2, h3, h4, h5, h6 { 
+/*Formatting the selection popup*/
+h1, h2 { 
   font: 175% 'Georgia', sans-serif;
   color: #000;
   margin: 0 0 15px 0;
   padding: 15px 0 5px 0;
   text-align: center;
 }
-
-h2
-{ font: normal 160% 'Georgia', arial, sans-serif;}
-
-h4, h5, h6
-{ margin: 0;
-  padding: 0 0 5px 0;
-  font: normal 120% 'Georgia', arial, sans-serif;}
-
-h5, h6
-{ font: 95% 'Georgia', arial, sans-serif;
-  padding: 0 0 15px 0;}
 
 #lists-button {
     padding: 2em 0 2em 0;

@@ -245,6 +245,7 @@ function createMap(color_dict, map) {
             while (menu.firstChild) {
                 menu.removeChild(menu.firstChild);
             };
+            menu.style.display = 'none';
         });
         menu.appendChild(back_button);
         visiblePlays = visibleLayerIds.map(function(item) {

@@ -145,9 +145,10 @@
         });
         //function for when someone presses the submit button
         $('#submit').click(function(){
-                modal = document.getElementById('selection_popup');
-                modal.style.display = 'none';
-                createMap(color_dict, map);
+            modal = document.getElementById('selection_popup');
+            modal.style.display = 'none';
+            document.getElementById('menu').style.display = 'inline-block';
+            createMap(color_dict, map);
         });        
     </script>
 
