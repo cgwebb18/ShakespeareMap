@@ -371,45 +371,45 @@ function createMap(color_dict, map) {
         };
         
         document.getElementById('menu').appendChild(map_options);
-        $(document).on('click', '#overlays', function() {
-            var v = document.getElementById('map_options').style.display;
-            if (v === 'none'){
-                document.getElementById('map_options').style.display = 'block';
-            }
-            else {
-                document.getElementById('map_options').style.display = 'none';
-            }
-        });
-        
-        //char_select function
-        $(document).on('click', '.char_select', function () {
-            if ($('#reset').length == true){
-                console.log('Right now you can only select one character at a time.')
-            }
-            else {
-                var character = $(this).attr('ca2');
-
-                for (var i = 0; i < visibleLayerIds.length; i++) {
-                    var layer = visibleLayerIds[i];
-                    map.setFilter(layer, ['==', ['get', 'character'], character]);
-                };
-                //adds reset button to menu
-                reset = $('<a id=\'reset\'></a>').text('Deselect ' + character).click(function() {
-                    for (var i = 0; i < visibleLayerIds.length; i++) {
-                        var layer = visibleLayerIds[i];
-                        map.setFilter(layer);
-                    };
-                    $("#reset").remove();
-                });
-
-
-                $("#menu").append(reset);
-            };
-        });
-        
     };
     createMenu(LayerIds, plays, colors);
 //    console.log(map.getStyle().layers);
 
 };
 
+
+$(document).on('click', '#overlays', function() {
+    var v = document.getElementById('map_options').style.display;
+    if (v === 'none'){
+        document.getElementById('map_options').style.display = 'block';
+    }
+    else {
+        document.getElementById('map_options').style.display = 'none';
+    }
+});
+
+//char_select function
+$(document).on('click', '.char_select', function () {
+    if ($('#reset').length == true){
+        console.log('Right now you can only select one character at a time.')
+    }
+    else {
+        var character = $(this).attr('ca2');
+
+        for (var i = 0; i < visibleLayerIds.length; i++) {
+            var layer = visibleLayerIds[i];
+            map.setFilter(layer, ['==', ['get', 'character'], character]);
+        };
+        //adds reset button to menu
+        reset = $('<a id=\'reset\'></a>').text('Deselect ' + character).click(function() {
+            for (var i = 0; i < visibleLayerIds.length; i++) {
+                var layer = visibleLayerIds[i];
+                map.setFilter(layer);
+            };
+            $("#reset").remove();
+        });
+
+
+        $("#menu").append(reset);
+    };
+});
