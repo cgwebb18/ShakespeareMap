@@ -6,7 +6,6 @@ var visiblePlays = [];
 var c_chars = [];
 var mapIDs = {'England':'ccqxorep', 'Mediterranean':'5k4mo5s5', 'London': 'b3drdggn', 'Greece': 'dzenz2dr', 'East Mediterranean': 'dkby1y88'};
 var overlay = '';
-var o_state = 0;
 
 function createMap(color_dict, map) {
     function filterbyplay(c_arr, p_arr) {
@@ -21,6 +20,9 @@ function createMap(color_dict, map) {
         }
         return acc;
     };
+    function onlyUnique(value, index, self) { 
+        return self.indexOf(value) === index;
+    }
     for (var key in color_dict) {
         plays = plays.concat(key);
         colors = colors.concat(color_dict[key]);
@@ -29,11 +31,7 @@ function createMap(color_dict, map) {
         return (play + '_labels');    
     };
 
-    function makeHLayer(layer) {
-        return (layer + '-heat');
-    };
     var layers = plays.map(makeLayer);
-    var h_layers = layers.map(makeHLayer);
     for (var i = 0; i < plays.length; i++) {
         visibleLayerIds = visibleLayerIds.concat(plays[i] + '_labels');
     };
@@ -52,6 +50,7 @@ function createMap(color_dict, map) {
         }
     });
     //loop to add sources and layers for all plays
+    layers = layers.filter( onlyUnique );
     layers.forEach(function(item, index, array){
         fpath = './data/Labels/' + item + '.geojson';
         layer_name = item;
@@ -65,44 +64,6 @@ function createMap(color_dict, map) {
             'type': 'circle',
             'source': layer_name
         });
-
-        //adding heat map layers
-//        map.addLayer({
-//            'id': layer_name + '-heat',
-//            'type': 'heatmap',
-//            'source': layer_name,
-//            'maxzoom': 9,
-//            'paint': {
-//                // Increase the heatmap color weight weight by zoom level
-//                // heatmap-intensity is a multiplier on top of heatmap-weight
-//                "heatmap-intensity": [
-//                    "interpolate",
-//                    ["linear"],
-//                    ["zoom"],
-//                    0, 1,
-//                    9, 3
-//                ],
-//                // Adjust the heatmap radius by zoom level
-//                "heatmap-radius": [
-//                    "interpolate",
-//                    ["linear"],
-//                    ["zoom"],
-//                    0, 2,
-//                    9, 20
-//                ],
-//                // Transition from heatmap to circle layer by zoom level
-//                "heatmap-opacity": [
-//                    "interpolate",
-//                    ["linear"],
-//                    ["zoom"],
-//                    7, 1,
-//                    9, 0
-//                ]
-//            },
-//            "layout": {
-//                "visibility": 'none'
-//            } 
-//        });
         map.setPaintProperty(layer_name, 'circle-color', color);
         //changes the mouse when it encounters a label
         map.on('mouseenter', layer_name, function () {
@@ -251,9 +212,41 @@ function createMap(color_dict, map) {
             map.setLayoutProperty(id, 'visibility', 'visible');
         };
     };
-    //TODO: fix up this function so that it creates a color coded menu (will require a lot of CSS work)
+
     //this function creates the menu, so the LayerIds can change and it shouldn't affect this
+    var menu = document.getElementById('menu');
     function createMenu(LIds, ps, cs){
+        //back to menu selection
+        var back_button = document.createElement('a');
+        back_button.setAttribute('id', 'back');
+        back_button.innerHTML = 'Back to Selection';
+        $(document).on('click', '#back', function () {
+            layers.forEach(function(item, index, array){
+                fpath = './data/Labels/' + item + '.geojson';
+                layer_name = item;
+                map.removeLayer(layer_name);
+                map.removeSource(layer_name);
+            });
+            map.removeLayer('labels');
+            map.removeSource('labels');
+            for (key in mapIDs) {
+                map.removeLayer(key);
+                map.removeSource(key);
+            }
+            createDummyMenu({});
+            document.getElementById('d_menu').style.display = 'none';
+            document.getElementById('color_list').style.display = 'inline-block';
+            document.getElementById('selection_popup').style.display = 'block';
+            visibleLayerIds = [];
+            LayerIds = [];
+            plays = [];
+            colors = [];
+            var color_dict = {};
+            while (menu.firstChild) {
+                menu.removeChild(menu.firstChild);
+            };
+        });
+        menu.appendChild(back_button);
         visiblePlays = visibleLayerIds.map(function(item) {
             return item.replace('_labels', '');
         });
@@ -291,22 +284,6 @@ function createMap(color_dict, map) {
                 }
                 visibleLayerToggle(clickedLayer);
             };
-            //heatmap on double click
-//            link.ondblclick = function(e) {
-//                //clickedLayer ~ Coriolanus_labels (refers to layer)
-//                //clickedLayerID ~ color_2 (refers to link on the menu)
-//                var clickedLayer = this.getAttribute('layer_id') + '-heat';
-//                var clickedLayerID = this.getAttribute('id');
-//                let el = document.getElementById(clickedLayerID);
-//                var viz = map.getLayoutProperty(clickedLayer, 'visibility')
-//                if (viz === 'visible') {
-//                    map.setLayoutProperty(clickedLayer, 'visibility', 'none')
-//                }
-//                else {
-//                    map.setLayoutProperty(clickedLayer, 'visibility', 'visible')
-//                }
-//            };
-            var menu = document.getElementById('menu');
             menu.appendChild(link);
             menu.style.display = 'inline-block';
         }
@@ -415,7 +392,6 @@ function createMap(color_dict, map) {
                     var layer = visibleLayerIds[i];
                     map.setFilter(layer, ['==', ['get', 'character'], character]);
                 };
-
                 //adds reset button to menu
                 reset = $('<a id=\'reset\'></a>').text('Deselect ' + character).click(function() {
                     for (var i = 0; i < visibleLayerIds.length; i++) {
@@ -429,6 +405,7 @@ function createMap(color_dict, map) {
                 $("#menu").append(reset);
             };
         });
+        
     };
     createMenu(LayerIds, plays, colors);
 //    console.log(map.getStyle().layers);
