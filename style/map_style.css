@@ -1,0 +1,334 @@
+html
+{ height: 100%;}
+
+*
+{ margin: 0;
+  padding: 0;}
+
+body
+{ font: normal .80em 'trebuchet ms', arial, sans-serif;
+  background: #F0EFE2;
+  color: #000;
+}
+
+.mapboxgl-popup {
+ max-height: 400px;
+ max-width: 400px;
+ font: 12px/20px 'Georgia', sans-serif;
+}
+
+.mapboxgl-popup-content {
+  overflow-y: auto;
+}
+
+/*Formatting the selection popup and the popups that appear when a user selects a place*/
+h1, h2, h3 { 
+  font: 175% 'Georgia', sans-serif;
+  color: #000;
+  margin: 0 0 15px 0;
+  padding: 15px 0 5px 0;
+  text-align: center;
+}
+
+/*Highlights selection area with a darker shade of brown*/
+#lists-button {
+    padding: 2em 0 2em 0;
+    border-radius: 5px;
+    background: #af8148;
+}
+
+/*Styling for the menu once the plays have been selected*/
+#menu {
+    background: #fff;
+    position: absolute;
+    z-index: 1;
+    top: 10px;
+    right: 10px;
+    border-radius: 3px;
+    width: 12%;
+    height: auto;
+    border: 1px solid rgba(0,0,0,0.4);
+    font-family: 'Georgia', sans-serif;
+    font-size: 20px;
+    display: none;
+}
+
+#back {
+    color: #fff;
+    background: #404040;
+}
+
+#menu a {
+    border-radius: 3px;
+    font-size: 13px;
+    display: inherit;
+    margin: 0;
+    padding: 5% 5%;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(0,0,0,0.25);
+    text-align: left;
+}
+
+/*Styling for the dummy menu in the selection popup*/
+#d_menu {
+    font-family: 'Georgia', sans-serif;
+    font-size: 20px;
+}
+
+#d_menu a {
+    border-radius: 3px;
+    font-size: 13px;
+    display: block;
+    margin-right: 2em;
+    padding: 0;
+    padding: 10px;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(0,0,0,0.25);
+    text-align: left;
+}
+
+/*styling for the map*/
+#map 
+{ 
+    position:absolute; 
+    top:0; 
+    bottom:0; 
+    width:100%;
+    height: 100%;
+    transition: all 0.3s; 
+}
+
+/*Styling for the color list*/
+#cl_color_1, #color_1 {
+    background-color: #800000;
+    border-color: #000;
+    color: #fff;
+}
+
+#cl_color_1:hover, #color_1:hover {
+    background-color: #d30808;
+}
+
+#cl_color_2, #color_2 {
+    background-color: #1e87ea;
+}
+
+#cl_color_2:hover, #color_2:hover {
+    background-color: #0859a5;
+}
+
+#cl_color_3, #color_3 {
+    background-color: #f44e30;
+}
+
+#cl_color_3:hover, #color_3:hover {
+    background-color: #ad3722;
+}
+
+#cl_color_4, #color_4 {
+    background-color: #911eb4;
+    border-color: #000;
+    color: #fff;
+}
+
+#cl_color_4:hover, #color_4:hover {
+    background-color: #67167f;
+}
+
+#cl_color_5, #color_5 {
+    background-color: #e6194B;
+    border-color: #000;
+    color: #fff;
+}
+
+#cl_color_5:hover, #color_5:hover {
+    background-color: #bc143b;
+}
+
+#cl_color_6, #color_6 {
+    background-color: #ffff21;
+}
+
+#cl_color_6:hover, #color_6:hover {
+    background-color: #bfbf1a;
+}
+
+#cl_color_7, #color_7 {
+    background-color: #5bce1c;
+}
+
+#cl_color_7:hover, #color_7:hover {
+    background-color: #49a517;
+}
+
+#cl_color_8, #color_8 {
+    background-color: #000075;
+    border-color: #000;
+    color: #fff;
+}
+
+#cl_color_8:hover, #color_8:hover {
+    background-color: #2121ff;
+}
+
+#color_1.inactive, #color_2.inactive, #color_3.inactive, #color_4.inactive, #color_5.inactive, #color_6.inactive, #color_7.inactive, #color_8.inactive {
+    opacity: 0.7;
+}
+
+#color_list, #play_list {
+    display: inline-block;
+    
+}
+
+#color_list {
+    font-family: 'Georgia', sans-serif;
+    margin-right: 4em;
+    list-style: none;
+    display: inline-block;
+}
+
+#c_container, #play_list {
+    display: inline-block;
+    margin-left: 10%;
+}
+
+#c_container {
+    float: right;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+#play_list {
+    font-family: 'Georgia', sans-serif;
+    list-style: none;
+    height: 300px;
+    overflow-y: scroll;
+}
+
+li.play{
+    background-color: #fff;
+}
+
+li.play, li.color {
+    border-style: solid;
+    border-width: thin;
+    font-size: 16px;
+    display: block;
+    margin: 5px;
+    padding: 5px;
+    border-radius: 3px;
+}
+
+/*increases size of list headings in s popup*/
+ul {
+    font-size: 20px;
+}
+
+/*This styling controls the selection popup*/
+.modal {
+    display: block; 
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgb(0,0,0); 
+    background-color: rgba(0,0,0,0.4); 
+}
+
+.modal-content {
+    background-color: #D5A15F;
+    margin: 5% auto; 
+    padding: 20px;
+    border: 1px solid #888;
+    width: 35%;
+    border-radius: 15px;
+}
+
+#submit {
+    display: none;
+    text-align: center;
+    border-radius: 0.5em;
+    height: 25px;
+    width: 50px;
+    margin-left: 50%;
+}
+
+
+
+.mapboxgl-popup-content {
+    overflow-y: auto;
+    border-radius: 6px;
+}
+
+/*styling for the overlays*/
+#map_options {
+    height: 3em;
+    overflow-y: scroll;
+}
+
+#map_options li{
+    font-size: 0.7em;
+    padding: 2% 5%;
+}
+
+.o_option {
+    color: #000;
+    background: #fff;
+}
+
+.i_option {
+    color: #fff;
+    background: #00688B;
+
+}
+
+.i_option:hover {
+    color: #fff;
+    background: #00688B;
+    opacity: 0.5;
+}
+
+/*styling to highlight that character selection is possible*/
+.char_select {
+    text-decoration: underline;
+}
+
+.char_select:hover {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/*https://www.w3schools.com/howto/howto_js_rangeslider.asp*/
+.slider {
+  -webkit-appearance: none;
+  width: 80%;
+  height: 10px;
+  border-radius: 5px;   
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%; 
+  background: #00688B;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #4CAF50;
+  cursor: pointer;
+}
+
