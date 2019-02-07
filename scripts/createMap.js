@@ -96,7 +96,7 @@ function createMap(color_dict, map) {
             'Henry VIII': 'H8',
             'Henry IV, Part I': '1H4',
             'Henry IV, Part II': '2H4',
-            'Henry V': 'H4',
+            'Henry V': 'H5',
             'Henry VI, Part 1': '1H6',
             'Henry VI, Part 2': '2H6',
             'Henry VI, Part 3': '3H6',
@@ -287,7 +287,7 @@ function createMap(color_dict, map) {
             menu.appendChild(link);
             menu.style.display = 'inline-block';
         }
-        $('#menu').append('<a id=\'overlays\'>Toggle Historical Maps</a>');
+        $('#menu').append('<a id=\'overlays\'>Historical Maps &#x25BC;</a>');
         var map_options = document.createElement('ul');
         map_options.setAttribute('id', 'map_options');
         map_options.setAttribute('style', 'display: none; list-style: none;');
@@ -381,9 +381,11 @@ $(document).on('click', '#overlays', function() {
     var v = document.getElementById('map_options').style.display;
     if (v === 'none'){
         document.getElementById('map_options').style.display = 'block';
+        $('#overlays').text('Historical Maps \u25b2');
     }
     else {
         document.getElementById('map_options').style.display = 'none';
+        $('#overlays').text('Historical Maps \u25bc');
     }
 });
 
