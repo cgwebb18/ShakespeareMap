@@ -118,7 +118,6 @@ function createMap(color_dict, map) {
     };
     // When a click event occurs on a feature in the labels layer generate a list of mentions
     map.on('click', 'labels', function (e) {
-        console.log(e.features);
         var coordinates = e.features[0].geometry.coordinates.slice();
         var place = c_place;
         var play_acc = []
@@ -221,6 +220,7 @@ function createMap(color_dict, map) {
         back_button.setAttribute('id', 'back');
         back_button.innerHTML = 'Back to Selection';
         $(document).on('click', '#back', function () {
+            color_dict = {};
             layers.forEach(function(item, index, array){
                 map.removeLayer(item);
                 map.removeSource(item);
@@ -231,16 +231,14 @@ function createMap(color_dict, map) {
                 map.removeLayer(key);
                 map.removeSource(key);
             }
-            createDummyMenu({});
-            document.getElementById('d_menu').style.display = 'none';
-            document.getElementById('color_list').style.display = 'inline-block';
+            document.getElementById('d_menu').style.display = 'inline-block';
+            document.getElementById('color_list').style.display = 'none';
             document.getElementById('selection_popup').style.display = 'block';
             visibleLayerIds = [];
             layers = [];
             LayerIds = [];
             plays = [];
             colors = [];
-            color_dict = {};
             while (menu.firstChild) {
                 menu.removeChild(menu.firstChild);
             };
@@ -372,8 +370,6 @@ function createMap(color_dict, map) {
         document.getElementById('menu').appendChild(map_options);
     };
     createMenu(LayerIds, plays, colors);
-//    console.log(map.getStyle().layers);
-
 };
 
 

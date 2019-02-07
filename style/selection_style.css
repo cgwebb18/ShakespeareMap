@@ -1,11 +1,9 @@
-
 #color_list, #play_list {
     display: inline-block;
-    
 }
 
 #color_list {
-    text-align: right;
+/*    text-align: right;*/
 }
 
 #submit {

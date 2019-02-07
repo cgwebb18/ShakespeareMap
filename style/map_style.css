@@ -182,7 +182,7 @@ h1, h2, h3 {
 
 #color_list {
     font-family: 'Georgia', sans-serif;
-    margin-right: 4em;
+    margin-right: 80px;
     list-style: none;
     display: inline-block;
 }
@@ -224,6 +224,11 @@ ul {
     font-size: 20px;
 }
 
+.mapboxgl-popup-close-button {
+    height: 10px;
+    width: 10px;
+}
+
 /*This styling controls the selection popup*/
 .modal {
     display: block; 
@@ -243,7 +248,7 @@ ul {
     margin: 5% auto; 
     padding: 20px;
     border: 1px solid #888;
-    width: 35%;
+    width: 450px;
     border-radius: 15px;
 }
 

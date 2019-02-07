@@ -90,7 +90,7 @@
                 }
                 for(var i = 0; i < c_list.children.length; i++){
                     c_list.children[i].style.opacity = '1';   
-                };              
+                };
                 Object.values(color_dict).forEach(function(item, index, array){
                     var cl_id = 'cl_' + color_ref[item];
                     document.getElementById(cl_id).style.opacity = '0.2';
@@ -109,7 +109,6 @@
                 if (Object.values(color_dict).indexOf(c_h) != -1) {
                     for (var k in color_dict) {
                         if (color_dict[k] == c_h) {
-                            console.log(color_dict[k])
                             delete color_dict[k];
                         }
                     }
@@ -125,6 +124,7 @@
             });
             
         });
+        color_dict = {};
     </script>
     </div>
     </div>
