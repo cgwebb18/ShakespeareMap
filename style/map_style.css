@@ -217,6 +217,7 @@ li.play, li.color {
     margin: 5px;
     padding: 5px;
     border-radius: 3px;
+    cursor: pointer;
 }
 
 /*increases size of list headings in s popup*/
@@ -294,16 +295,6 @@ ul {
     color: #fff;
     background: #00688B;
     opacity: 0.5;
-}
-
-/*styling to highlight that character selection is possible*/
-.char_select {
-    text-decoration: underline;
-}
-
-.char_select:hover {
-    text-decoration: none;
-    cursor: pointer;
 }
 
 /*https://www.w3schools.com/howto/howto_js_rangeslider.asp*/

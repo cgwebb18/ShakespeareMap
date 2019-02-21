@@ -87,6 +87,11 @@
                 current_play = e.target.textContent;
                 if (current_play in color_dict) {
                     delete color_dict[current_play];
+                    e.target.style.backgroundColor = '#fff';
+                    current_play = '';
+                }
+                else {
+                    e.target.style.backgroundColor = '#a9a9a9';
                 }
                 for(var i = 0; i < c_list.children.length; i++){
                     c_list.children[i].style.opacity = '1';   
@@ -114,11 +119,12 @@
                     }
                     color_dict[current_play] = c_h;
                 };
-                c_list.style.display = 'none';
-                s.style.display = 'block';
+                
                 if (Object.keys(color_dict).length != 0) {
-                    //console.log('here');
+                    console.log('here');
                     createDummyMenu(color_dict);
+                    c_list.style.display = 'none';
+                    s.style.display = 'block';
                     document.getElementById('d_menu').style.display = 'inline-block';
                 }
             });
