@@ -179,6 +179,7 @@ function createMap(color_dict, map) {
             .setLngLat(coordinates)
             .setHTML(descriptions)
             .addTo(map);
+        $('.mapboxgl-popup-close-button').text('X');
     });
     
     //helper function to add multiple attributes in one line
