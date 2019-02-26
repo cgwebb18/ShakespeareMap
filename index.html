@@ -2,162 +2,172 @@
 <html>
 
 <head>
-    <title>ShakespeareMap</title>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-    <link rel="stylesheet" type="text/css" href="style/map_style.css" title="style" />
-    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.js'></script>
-    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.css' rel='stylesheet' />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="scripts/createMap.js"></script>
-    <script src="scripts/p_chars.js"></script>
+  <title>ShakespeareMap</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <link rel="stylesheet" type="text/css" href="style/map_style.css" title="style" />
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.js'></script>
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.css' rel='stylesheet' />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="scripts/createMap.js"></script>
+  <script src="scripts/p_chars.js"></script>
 
 </head>
 
 <body>
-    <div id='selection_popup' class='modal'>
-    <div class='modal-content'><h1>Map Shakespeare's Historical Plays</h1>
-    <h2>Pick a play then pick a color:</h2>
-    <div id="lists-button">
-    <ul id='play_list'>Plays:
-    </ul>
-    <div id='c_container'>
-    <nav id='d_menu'></nav>
-    <ul id="color_list"> Colors:
-        <li id='cl_color_1' class='color' hex='#800000'></li>
-        <li id='cl_color_2' class='color' hex='#1e87ea'></li>
-        <li id='cl_color_3' class='color' hex='#f44e30'></li>
-        <li id='cl_color_4' class='color' hex='#911eb4'></li>
-        <li id='cl_color_5' class='color' hex='#e6194B'></li>
-        <li id='cl_color_6' class='color' hex='#ffff21'></li>
-        <li id='cl_color_7' class='color' hex='#49a517'></li>
-        <li id='cl_color_8' class='color' hex='#000075'></li>
-    </ul>
-    </div>
-    <button id='submit'>Go</button>
-    </div>
-    <script type='text/javascript'>
-        var all_plays = ['Titus Andronicus', 'Coriolanus', 'Troilus and Cressida', 'Pericles', 'Timon of Athens', 'Antony and Cleopatra', 'Julius Caesar', 'Henry IV, Part I', 'Henry IV, Part II', 'Henry V', 'Henry VI, Part 1', 'Henry VI, Part 2', 'Henry VI, Part 3', 'Henry VIII', 'King John', 'Richard II', 'Richard III']
+  <div id='selection_popup' class='modal'>
+    <div class='modal-content'>
+      <h1>Map Shakespeare's Historical Plays</h1>
+      <h2>Pick a play then pick a color:</h2>
+      <div id="lists-button">
+        <ul id='play_list'>Plays:
+        </ul>
+        <div id='c_container'>
+          <nav id='d_menu'></nav>
+          <ul id="color_list"> Colors:
+            <li id='cl_color_1' class='color' hex='#800000'></li>
+            <li id='cl_color_2' class='color' hex='#1e87ea'></li>
+            <li id='cl_color_3' class='color' hex='#f44e30'></li>
+            <li id='cl_color_4' class='color' hex='#911eb4'></li>
+            <li id='cl_color_5' class='color' hex='#e6194B'></li>
+            <li id='cl_color_6' class='color' hex='#ffff21'></li>
+            <li id='cl_color_7' class='color' hex='#49a517'></li>
+            <li id='cl_color_8' class='color' hex='#000075'></li>
+          </ul>
+        </div>
+        <button id='submit'>Go</button>
+      </div>
+      <script type='text/javascript'>
+        var all_plays = ['Titus Andronicus', 'Coriolanus', 'Troilus and Cressida', 'Pericles', 'Timon of Athens', 'Antony and Cleopatra', 'Julius Caesar', 'Henry IV, Part I', 'Henry IV, Part II', 'Henry V', 'Henry VI, Part 1', 'Henry VI, Part 2',
+          'Henry VI, Part 3', 'Henry VIII', 'King John', 'Richard II', 'Richard III'
+        ]
         var color_dict = {};
         var current_play = '';
         var s = document.getElementById('submit');
         var c_list = document.getElementById('color_list');
+        var p_list = document.getElementById('play_list');
         var d_menu = document.getElementById('d_menu');
         var color_ref = {
-                '#800000':'color_1',
-                '#1e87ea':'color_2',
-                '#f44e30':'color_3',
-                '#911eb4':'color_4',
-                '#e6194B':'color_5',
-                '#ffff21':'color_6',
-                '#49a517':'color_7',
-                '#000075':'color_8'
-            };
-        
-        function createDummyMenu(cd){
-            //first delete the old menu
-            var d_menu = document.getElementById('d_menu');
-            while (d_menu.firstChild) {
-                d_menu.removeChild(d_menu.firstChild);
-            };
-            var ps = Object.keys(cd);
-            var cs = Object.values(cd);
-            //create the new menu
-            for (var i = 0; i < ps.length; i++) {
-                var id = color_ref[cs[i]];
-                var link = document.createElement('a');
-                link.setAttribute('id', id);
-                link.className = '';
-                link.textContent = ps[i];
-                d_menu.appendChild(link);
-            }
+          '#800000': 'color_1',
+          '#1e87ea': 'color_2',
+          '#f44e30': 'color_3',
+          '#911eb4': 'color_4',
+          '#e6194B': 'color_5',
+          '#ffff21': 'color_6',
+          '#49a517': 'color_7',
+          '#000075': 'color_8'
+        };
 
+        function createDummyMenu(cd) {
+          //first delete the old menu
+          var d_menu = document.getElementById('d_menu');
+          while (d_menu.firstChild) {
+            d_menu.removeChild(d_menu.firstChild);
+          };
+          var ps = Object.keys(cd);
+          var cs = Object.values(cd);
+          //create the new menu
+          for (var i = 0; i < ps.length; i++) {
+            var id = color_ref[cs[i]];
+            var link = document.createElement('a');
+            link.setAttribute('id', id);
+            link.className = '';
+            link.textContent = ps[i];
+            d_menu.appendChild(link);
+          }
         };
 
         $('.modal-content').ready(function() {
-            all_plays.forEach(function(item, index, array){
-                var title = document.createTextNode(item);
-                var li = document.createElement('li');
-                li.setAttribute('class', 'play');
-                li.setAttribute('id', ('play_' + index));
-                li.appendChild(title);
-                $('#play_list').append(li);
+          all_plays.forEach(function(item, index, array) {
+            var title = document.createTextNode(item);
+            var li = document.createElement('li');
+            li.setAttribute('class', 'play inactive');
+            li.setAttribute('id', ('play_' + index));
+            li.appendChild(title);
+            $('#play_list').append(li);
+          });
+          //click functions of .play and .color should be related so that the color list shows the associated plays dynamically
+          $('.play').click(function(e) {
+            current_play = e.target.textContent;
+            if (current_play in color_dict) {
+              delete color_dict[current_play];
+            }
+            for (var i = 0; i < c_list.children.length; i++) {
+              c_list.children[i].style.opacity = '1';
+            };
+            Object.values(color_dict).forEach(function(item, index, array) {
+              var cl_id = 'cl_' + color_ref[item];
+              document.getElementById(cl_id).style.opacity = '0.2';
             });
-            //click functions of .play and .color should be related so that the color list shows the associated plays dynamically
-            $('.play').click(function(e) {
-                current_play = e.target.textContent;
-                if (current_play in color_dict) {
-                    delete color_dict[current_play];
-                    e.target.style.backgroundColor = '#fff';
-                    current_play = '';
+            c_list.style.display = 'inline-block';
+            d_menu.style.display = 'none';
+            s.style.display = 'none';
+          });
+
+          $('.color').click(function(e) {
+            //if color has already been assigned, just switch the assignment
+            var c_h = e.target.getAttribute('hex');
+            if (current_play != '') {
+              color_dict[current_play] = c_h;
+            };
+            if (Object.values(color_dict).indexOf(c_h) != -1) {
+              for (var k in color_dict) {
+                if (color_dict[k] == c_h) {
+                  p_c = k;
+                  delete color_dict[k];
                 }
-                else {
-                    e.target.style.backgroundColor = '#a9a9a9';
-                }
-                for(var i = 0; i < c_list.children.length; i++){
-                    c_list.children[i].style.opacity = '1';   
-                };
-                Object.values(color_dict).forEach(function(item, index, array){
-                    var cl_id = 'cl_' + color_ref[item];
-                    document.getElementById(cl_id).style.opacity = '0.2';
-                });
-                c_list.style.display = 'inline-block';
-                d_menu.style.display = 'none';
-                s.style.display = 'none';
-            });
-            
-            $('.color').click(function(e) {
-                //if color has already been assigned, just switch the assignment
-                var c_h = e.target.getAttribute('hex');
-                if (current_play != ''){
-                    color_dict[current_play] = c_h;
-                };
-                if (Object.values(color_dict).indexOf(c_h) != -1) {
-                    for (var k in color_dict) {
-                        if (color_dict[k] == c_h) {
-                            delete color_dict[k];
-                        }
-                    }
-                    color_dict[current_play] = c_h;
-                };
-                
-                if (Object.keys(color_dict).length != 0) {
-                    createDummyMenu(color_dict);
-                    c_list.style.display = 'none';
-                    s.style.display = 'block';
-                    document.getElementById('d_menu').style.display = 'inline-block';
-                }
-            });
-            
+              }
+              color_dict[current_play] = c_h;
+            };
+
+            if (Object.keys(color_dict).length != 0) {
+              createDummyMenu(color_dict);
+              c_list.style.display = 'none';
+              s.style.display = 'block';
+              document.getElementById('d_menu').style.display = 'inline-block';
+            }
+          });
+
+        });
+
+        $('.modal-content').click(function() {
+          for (var i = 0; i < p_list.children.length; i++) {
+            var c_p = p_list.children[i].textContent;
+            if (c_p in color_dict) {
+              p_list.children[i].style.backgroundColor = '#a9a9a9';
+            } else {
+              p_list.children[i].style.backgroundColor = '#fff';
+            }
+          };
         });
         color_dict = {};
-    </script>
+      </script>
     </div>
-    </div>
-        <div id="site_content">
-            <nav id='menu'></nav>
-            <div id='map'></div>
+  </div>
+  <div id="site_content">
+    <nav id='menu'></nav>
+    <div id='map'></div>
     <script type="text/javascript">
-        //initialize map
-        //public token, change this to put it in production
-        mapboxgl.accessToken = 'pk.eyJ1IjoiY2d3ZWJiMTgiLCJhIjoiY2psd3FhMTMwMDFjNjN2b3Zmd3JyMWV2ZSJ9.r8XM2Wrgj6kueUh3Jdo3iw';
-        var map = new mapboxgl.Map({
-            container: 'map',
-            style: 'mapbox://styles/cgwebb18/cjm96xrni6jkp2snw5ggcrytj',
-            //TODO: change center + zoom based on points represented in map
-            center: [18.465510, 41.768844],
-            zoom: 3.8,
-            crossSourceCollisions: false
-        });
-        //function for when someone presses the submit button
-        $('#submit').click(function(){
-            modal = document.getElementById('selection_popup');
-            modal.style.display = 'none';
-            document.getElementById('menu').style.display = 'inline-block';
-            createMap(color_dict, map);
-        });        
+      //initialize map
+      //public token, change this to put it in production
+      mapboxgl.accessToken = 'pk.eyJ1IjoiY2d3ZWJiMTgiLCJhIjoiY2psd3FhMTMwMDFjNjN2b3Zmd3JyMWV2ZSJ9.r8XM2Wrgj6kueUh3Jdo3iw';
+      var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/cgwebb18/cjm96xrni6jkp2snw5ggcrytj',
+        //TODO: change center + zoom based on points represented in map
+        center: [18.465510, 41.768844],
+        zoom: 3.8,
+        crossSourceCollisions: false
+      });
+      //function for when someone presses the submit button
+      $('#submit').click(function() {
+        modal = document.getElementById('selection_popup');
+        modal.style.display = 'none';
+        document.getElementById('menu').style.display = 'inline-block';
+        createMap(color_dict, map);
+      });
     </script>
 
-        </div>
+  </div>
 </body>
 
 </html>
