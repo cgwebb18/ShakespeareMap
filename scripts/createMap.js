@@ -222,6 +222,7 @@ function createMap(color_dict, map) {
         back_button.innerHTML = 'Back to Selection';
         $(document).on('click', '#back', function () {
             color_dict = {};
+            map.setLayoutProperty(overlay, 'visibility', 'none');
             layers.forEach(function(item, index, array){
                 map.removeLayer(item);
                 map.removeSource(item);
@@ -244,6 +245,8 @@ function createMap(color_dict, map) {
                 menu.removeChild(menu.firstChild);
             };
             menu.style.display = 'none';
+            overlay = '';
+            
         });
         menu.appendChild(back_button);
         visiblePlays = visibleLayerIds.map(function(item) {
@@ -292,21 +295,22 @@ function createMap(color_dict, map) {
         map_options.setAttribute('style', 'display: none; list-style: none;');
         
         //opacity slider
-        var o_slide = document.createElement('input');
-        o_slide.setAttribute('type', 'range');
-        o_slide.setAttribute('min', '0');
-        o_slide.setAttribute('max', '5');
-        o_slide.setAttribute('step', '1');
-        o_slide.setAttribute('value', '5');
-        o_slide.setAttribute('width', '80%');
-        o_slide.setAttribute('id', 'o_slide');
-        o_slide.className = 'slider';
-        o_slide.onchange = function (e) {
-            var v = (parseInt(e.target.value))/5;
-            if (overlay != ''){
-                map.setPaintProperty(overlay, 'raster-opacity', v);
-            }
-        };
+        var o_slide = $('<input></input>')
+                        .attr({'type' : 'range',
+                              'min' : '0',
+                              'max' : '5',
+                              'step' : '1',
+                              'value' : '5',
+                              'width' : '80%',
+                              'id' : 'o_slide',
+                              'class' : 'slider'
+                              })
+                        .change(function (e) {
+                            var v = (parseInt(e.target.value))/5;
+                            if (overlay != ''){
+                                map.setPaintProperty(overlay, 'raster-opacity', v);
+                            }
+                        });
         //loop to add map overlay options
         for (map_name in mapIDs) {
             var base_url = 'mapbox://cgwebb18.';
@@ -336,7 +340,7 @@ function createMap(color_dict, map) {
                     map.setLayoutProperty(e.target.id, 'visibility', 'visible');
                     document.getElementById(e.target.id).className = 'i_option';
                     if (l_overlay === '') {
-                        document.getElementById('menu').appendChild(o_slide);
+                        $('#menu').append(o_slide);
                     }
                     else {
                         document.getElementById('o_slide').style.display = 'inline-block';
