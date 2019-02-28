@@ -79,15 +79,21 @@
 
         $('.modal-content').ready(function() {
           all_plays.forEach(function(item, index, array) {
-            var title = document.createTextNode(item);
             var li = document.createElement('li');
-            li.setAttribute('class', 'play inactive');
+            li.setAttribute('class', 'o_play');
             li.setAttribute('id', ('play_' + index));
-            li.appendChild(title);
+            li.textContent = item;
             $('#play_list').append(li);
           });
           //click functions of .play and .color should be related so that the color list shows the associated plays dynamically
-          $('.play').click(function(e) {
+          $('.o_play').click(function(e) {
+            console.log('play');
+            if(e.target.className == 'o_play'){
+                if(document.getElementsByClassName('i_play').length != 0){
+                    document.getElementsByClassName('i_play')[0].className = 'o_play';
+                }
+                e.target.className = 'i_play';
+            }
             current_play = e.target.textContent;
             if (current_play in color_dict) {
               delete color_dict[current_play];
@@ -106,6 +112,9 @@
           });
 
           $('.color').click(function(e) {
+            if(document.getElementsByClassName('i_play').length != 0){
+                document.getElementsByClassName('i_play')[0].className = 'o_play';
+            }
             //if color has already been assigned, just switch the assignment
             var c_h = e.target.getAttribute('hex');
             if (current_play != '') {
@@ -137,6 +146,9 @@
            Object.values(c_list.children).forEach(function(item, index, array) {
               item.style.opacity = '1';
             });
+           if(document.getElementsByClassName('i_play').length != 0){
+                   document.getElementsByClassName('i_play')[0].className = 'o_play';
+           }
            c_list.style.display = 'inline-block';
            d_menu.style.display = 'none';
            s.style.display = 'none';
@@ -144,12 +156,18 @@
         });
 
         $('.modal-content').click(function() {
+          console.log('content');
           for (var i = 0; i < p_list.children.length; i++) {
             var c_p = p_list.children[i].textContent;
             if (c_p in color_dict) {
               p_list.children[i].style.backgroundColor = '#a9a9a9';
             } else {
-              p_list.children[i].style.backgroundColor = '#fff';
+              if(p_list.children[i].className == 'i_play'){
+                p_list.children[i].style.backgroundColor = '#6c85dd';
+              }
+              else{
+                p_list.children[i].style.backgroundColor = '#fff';
+              }
             }
           };
         });

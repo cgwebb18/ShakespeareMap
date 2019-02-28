@@ -222,7 +222,6 @@ function createMap(color_dict, map) {
         back_button.innerHTML = 'Back to Selection';
         $(document).on('click', '#back', function () {
             color_dict = {};
-            map.setLayoutProperty(overlay, 'visibility', 'none');
             layers.forEach(function(item, index, array){
                 map.removeLayer(item);
                 map.removeSource(item);

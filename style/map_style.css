@@ -35,6 +35,7 @@ h1, h2, h3 {
     padding: 2em 0 2em 0;
     border-radius: 5px;
     background: #af8148;
+    height: 330px;
 }
 
 /*Styling for the menu once the plays have been selected*/
@@ -205,11 +206,16 @@ h1, h2, h3 {
     overflow-y: scroll;
 }
 
-li.play{
+li.o_play{
     background-color: #fff;
+    border-color: #000;
 }
 
-li.play, li.color {
+li.i_play{
+    background-color: #6c85dd;
+}
+
+li.o_play, li.color, li.i_play {
     border-style: solid;
     border-width: thin;
     font-size: 16px;
@@ -250,10 +256,12 @@ ul {
     padding: 20px;
     border: 1px solid #888;
     width: 450px;
+    height: 520px;
     border-radius: 15px;
 }
 
 #submit, #clear {
+    margin-top: 10px;
     display: none;
     text-align: center;
     border-radius: 0.5em;
