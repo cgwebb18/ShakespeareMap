@@ -253,13 +253,17 @@ ul {
     border-radius: 15px;
 }
 
-#submit {
+#submit, #clear {
     display: none;
     text-align: center;
     border-radius: 0.5em;
     height: 25px;
     width: 50px;
-    margin-left: 50%;
+    margin-left: 40%;
+}
+
+#clear {
+    float: left;
 }
 
 

@@ -6,7 +6,7 @@
 /*    text-align: right;*/
 }
 
-#submit {
+#submit, #clear {
     display: block;
     text-align: center;
 }

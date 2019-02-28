@@ -34,7 +34,7 @@
             <li id='cl_color_8' class='color' hex='#000075'></li>
           </ul>
         </div>
-        <button id='submit'>Go</button>
+        <button id='clear'>Clear</button><button id='submit'>Go</button>
       </div>
       <script type='text/javascript'>
         var all_plays = ['Titus Andronicus', 'Coriolanus', 'Troilus and Cressida', 'Pericles', 'Timon of Athens', 'Antony and Cleopatra', 'Julius Caesar', 'Henry IV, Part I', 'Henry IV, Part II', 'Henry V', 'Henry VI, Part 1', 'Henry VI, Part 2',
@@ -42,6 +42,7 @@
         ]
         var color_dict = {};
         var current_play = '';
+        var c = document.getElementById('clear');
         var s = document.getElementById('submit');
         var c_list = document.getElementById('color_list');
         var p_list = document.getElementById('play_list');
@@ -101,6 +102,7 @@
             c_list.style.display = 'inline-block';
             d_menu.style.display = 'none';
             s.style.display = 'none';
+            c.style.display = 'none';
           });
 
           $('.color').click(function(e) {
@@ -123,10 +125,22 @@
               createDummyMenu(color_dict);
               c_list.style.display = 'none';
               s.style.display = 'block';
+              c.style.display = 'block';
               document.getElementById('d_menu').style.display = 'inline-block';
             }
           });
 
+        });
+        
+        $('#clear').click(function(){
+           color_dict = {}; 
+           Object.values(c_list.children).forEach(function(item, index, array) {
+              item.style.opacity = '1';
+            });
+           c_list.style.display = 'inline-block';
+           d_menu.style.display = 'none';
+           s.style.display = 'none';
+           c.style.display = 'none';
         });
 
         $('.modal-content').click(function() {
