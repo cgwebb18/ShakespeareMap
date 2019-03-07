@@ -6,6 +6,7 @@ var visiblePlays = [];
 var c_chars = [];
 var mapIDs = {'England':'ccqxorep', 'Mediterranean':'5k4mo5s5', 'London': 'b3drdggn', 'Greece': 'dzenz2dr', 'East Mediterranean': 'dkby1y88'};
 var overlay = '';
+var count = 0;
 
 function createMap(color_dict, map) {
     function filterbyplay(c_arr, p_arr) {
@@ -116,71 +117,73 @@ function createMap(color_dict, map) {
         var l = l_base + asl
         return base + p_abv + l
     };
-    // When a click event occurs on a feature in the labels layer generate a list of mentions
-    map.on('click', 'labels', function (e) {
-        var coordinates = e.features[0].geometry.coordinates.slice();
-        var place = c_place;
-        var play_acc = []
-        var l = e.features.length;
-        var descriptions = '<h3>' + place + '</h3><ul>';
-        for (i = 0; i < l; i++){
-            var play = e.features[i].properties.play;
-            var id = play + '_labels';
-            //this ensures that only visible layers can be clicked
-            if (visibleLayerIds.includes(id)) {
-                if (play_acc.includes(play) == false) {
-                    play_acc.push(play);
+    if(count == 0){ 
+        // When a click event occurs on a feature in the labels layer generate a list of mentions
+        map.on('click', 'labels', function (e) {
+            var coordinates = e.features[0].geometry.coordinates.slice();
+            var place = c_place;
+            var play_acc = []
+            var l = e.features.length;
+            var descriptions = '<h3>' + place + '</h3><ul>';
+            for (i = 0; i < l; i++){
+                var play = e.features[i].properties.play;
+                var id = play + '_labels';
+                //this ensures that only visible layers can be clicked
+                if (visibleLayerIds.includes(id)) {
+                    if (play_acc.includes(play) == false) {
+                        play_acc.push(play);
+                    }
+                    var character = e.features[i].properties.character;
+                    var asl_num = e.features[i].properties["a.s.l."];
+                    var url = mkURL(play, asl_num);
+                    var n_d = '<li class=\'ref\'>' + play + ', ' + 
+                        //adding function to highlight one character's lines at a time 'ca' = custom attribute
+                        '<a ca2=\"' + character + '\"' + 'class=\"char_select\"' + '>' + character + '</a>' 
+                        + ', ' + '<a href=\'' + url + '\' target=\'_blank\'>' + asl_num + '</a></li>';
+                    var descriptions = descriptions + n_d;
                 }
-                var character = e.features[i].properties.character;
-                var asl_num = e.features[i].properties["a.s.l."];
-                var url = mkURL(play, asl_num);
-                var n_d = '<li class=\'ref\'>' + play + ', ' + 
-                    //adding function to highlight one character's lines at a time 'ca' = custom attribute
-                    '<a ca2=\"' + character + '\"' + 'class=\"char_select\"' + '>' + character + '</a>' 
-                    + ', ' + '<a href=\'' + url + '\' target=\'_blank\'>' + asl_num + '</a></li>';
-                var descriptions = descriptions + n_d;
-            }
-        };
-        descriptions = descriptions + '</ul>'
-        //i_chars 'initial characters' these should be from only the plays that mention this place
-        i_chars = filterbyplay(c_chars, play_acc);
-        //r_chars 'relevant characters' these are the characters whose names include the place name
-        r_chars = []
-        for (i = 0; i < i_chars.length; i++) {
-            char = i_chars[i][0];
-            charray = char.split(" ");
-            for (x = 0; x < charray.length; x++) {
-                if (charray[x] == c_place) {
-                    r_chars.push(i_chars[i]);
+            };
+            descriptions = descriptions + '</ul>'
+            //i_chars 'initial characters' these should be from only the plays that mention this place
+            i_chars = filterbyplay(c_chars, play_acc);
+            //r_chars 'relevant characters' these are the characters whose names include the place name
+            r_chars = []
+            for (i = 0; i < i_chars.length; i++) {
+                char = i_chars[i][0];
+                charray = char.split(" ");
+                for (x = 0; x < charray.length; x++) {
+                    if (charray[x] == c_place) {
+                        r_chars.push(i_chars[i]);
+                    }
                 }
-            }
-            
-        }
-        if (r_chars.length != 0) {
-            var base = 'These mentions might refer to '
-            for (v = 0; v < r_chars.length; v++){
-                if (v > 0) {
-                    base = base + " or " + r_chars[v][0] + " from " + r_chars[v][1]
-                }
-                else {
-                    base = base + r_chars[v][0] + " from " + r_chars[v][1]
-                }
-            }
-            descriptions = '<div id=chars>' + base + '</div>' + descriptions 
-        }
-        // Ensure that if the map is zoomed out such that multiple
-        // copies of the feature are visible, the popup appears
-        // over the copy being pointed to.
-        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-            coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-        }
 
-        new mapboxgl.Popup()
-            .setLngLat(coordinates)
-            .setHTML(descriptions)
-            .addTo(map);
-        $('.mapboxgl-popup-close-button').text('X');
-    });
+            }
+            if (r_chars.length != 0) {
+                var base = 'These mentions might refer to '
+                for (v = 0; v < r_chars.length; v++){
+                    if (v > 0) {
+                        base = base + " or " + r_chars[v][0] + " from " + r_chars[v][1]
+                    }
+                    else {
+                        base = base + r_chars[v][0] + " from " + r_chars[v][1]
+                    }
+                }
+                descriptions = '<div id=chars>' + base + '</div>' + descriptions 
+            }
+            // Ensure that if the map is zoomed out such that multiple
+            // copies of the feature are visible, the popup appears
+            // over the copy being pointed to.
+            while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+            }
+
+            new mapboxgl.Popup()
+                .setLngLat(coordinates)
+                .setHTML(descriptions)
+                .addTo(map);
+            $('.mapboxgl-popup-close-button').text('X');
+        });
+    }
     
     //helper function to add multiple attributes in one line
     function setAttributes(el, attrs) {
@@ -221,6 +224,7 @@ function createMap(color_dict, map) {
         back_button.setAttribute('id', 'back');
         back_button.innerHTML = 'Back to Selection';
         $(document).on('click', '#back', function () {
+            count += 1;
             color_dict = {};
             layers.forEach(function(item, index, array){
                 map.removeLayer(item);
@@ -374,6 +378,7 @@ function createMap(color_dict, map) {
         document.getElementById('menu').appendChild(map_options);
     };
     createMenu(LayerIds, plays, colors);
+    console.log('createMenu called');
 };
 
 

@@ -87,7 +87,6 @@
           });
           //click functions of .play and .color should be related so that the color list shows the associated plays dynamically
           $('.o_play').click(function(e) {
-            console.log('play');
             if(e.target.className == 'o_play'){
                 if(document.getElementsByClassName('i_play').length != 0){
                     document.getElementsByClassName('i_play')[0].className = 'o_play';
@@ -156,7 +155,6 @@
         });
 
         $('.modal-content').click(function() {
-          console.log('content');
           for (var i = 0; i < p_list.children.length; i++) {
             var c_p = p_list.children[i].textContent;
             if (c_p in color_dict) {
